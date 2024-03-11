@@ -468,7 +468,6 @@
             <div class="section-title">
                 <span>Contact</span>
                 <h2>Contact</h2>
-                <p>Sit sint consectetur velit quisquam cupiditate impedit suscipit alias</p>
             </div>
 
             <div class="row">
@@ -499,8 +498,14 @@
                 </div>
 
                 <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-                    <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                    <form action="{{route('user.msg')}}" method="post" role="form" class="php-email-form">
+                        @csrf
                         <div class="row">
+                            @if (session('success_msg'))
+                            <div class="form-group col-md-12 alert alert-success" role="alert">
+                                {{ session('success_msg') }}
+                            </div>
+                            @endif
                             <div class="form-group col-md-6">
                                 <label for="name">Your Name</label>
                                 <input type="text" name="name" class="form-control" id="name" required>
