@@ -5,8 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Usermsg extends Model
+class PrintingPress extends Model
 {
-    protected $table='user_msg';
+    protected $table='printing_press';
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'address',
+    ];
+
 }

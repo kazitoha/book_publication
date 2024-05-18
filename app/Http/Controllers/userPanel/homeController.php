@@ -4,7 +4,7 @@ namespace App\Http\Controllers\userPanel;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Contact;
+use App\Models\Usermsg;
 
 class homeController extends Controller
 {

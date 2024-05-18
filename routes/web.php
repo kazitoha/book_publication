@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\adminPanel\printingPressController;
+use App\Http\Controllers\adminPanel\storeBookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,35 +15,50 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+Route::prefix('admin')->middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'admin'])->group(function () {
+
+    //dashbaord
     Route::get('/dashboard', function () {
-        return redirect('admin/dashboard');
-    });
-    Route::prefix('admin')->middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
-       //dashbaord
-
-        Route::get('/dashboard', function () {
-            return view('adminPanel/dashboard');
-        })->name('dashboard');
-
-        Route::get('user/msg', 'App\Http\Controllers\adminPanel\contactController@index')->name('admin.user.msg');
-        Route::get('service', 'App\Http\Controllers\adminPanel\contactController@index')->name('admin.service');
-        Route::get('why_choose_us', 'App\Http\Controllers\adminPanel\contactController@index')->name('admin.why.choose.us');
-        Route::get('portfolio', 'App\Http\Controllers\adminPanel\contactController@index')->name('admin.portfolio');
-        Route::get('testimonial', 'App\Http\Controllers\adminPanel\contactController@index')->name('admin.testimonials');
+        return view('adminPanel/dashboard');
+    })->name('admin.dashboard');
 
 
+
+    Route::controller(printingPressController::class)->group(function () {
+
+        Route::get('printing/press', 'index')->name('admin.printing.press');
+        Route::post('add/printing/press', 'store')->name('admin.printing.store');
+        Route::get('get/printing/press/data', 'showTableData')->name('admin.get.printing.press.data');
+        Route::get('get/printing/press/edit/data/{id}', 'edit')->name('admin.get.printing.press.edit');
+        Route::put('printing/press/update/data/{id}', 'update')->name('admin.get.printing.press.update');
+        Route::delete('printing/press/delete/{id}',  'destroy')->name('admin.printing.press.delete');
     });
 
 
 
+    Route::controller(storeBookController::class)->group(function () {
+
+        Route::get('store/book', 'index')->name('admin.store.book');
+        Route::post('store/book/store', 'store')->name('admin.store.book.store');
+        Route::get('get/book/storage/data', 'showTableData')->name('admin.get.book.storage.data');
+        Route::get('get/book/storage/edit/data/{id}', 'edit')->name('admin.get.book.storage.edit');
+        Route::put('store/book/update/data/{id} ', 'update')->name('admin.get.book.storage.update');
+        Route::delete('store/book/delete/{id}',  'destroy')->name('admin.printing.press.delete');
 
 
-
-
-
-    Route::get('/', function () {
-        return view('userPanel/dashboard');
     });
 
-    Route::post('user/msg/store', 'App\Http\Controllers\userPanel\homeController@store')->name('user.msg');
+});
+
+
+
+
+
+Route::get('/', function () {
+    return view('userPanel/dashboard');
+});
+
+Route::post('user/msg/store', 'App\Http\Controllers\userPanel\homeController@store')->name('user.msg');
 
