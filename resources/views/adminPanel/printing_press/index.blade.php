@@ -121,6 +121,12 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+        $(document).ready(function() {
+            fetchPrintingPresses();
+        });
+
+
         function submitForm() {
             // Get the form element
             const form = $('#printingPressForm');

@@ -2,12 +2,11 @@
 <html lang="en">
 
 
-<!-- index.html  21 Nov 2019 03:44:50 GMT -->
 
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Otika - Admin Dashboard Template</title>
+    <title>NexioBD</title>
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('admin_assets/css/app.min.css') }}">
     <!-- Template CSS -->
@@ -51,77 +50,9 @@
                     </ul>
                 </div>
                 <ul class="navbar-nav navbar-right">
+
                     <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                            class="nav-link nav-link-lg message-toggle"><i data-feather="mail"></i>
-                            <span class="badge headerBadge1">
-                                6 </span> </a>
-                        <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
-                            <div class="dropdown-header">
-                                Messages
-                                <div class="float-right">
-                                    <a href="#">Mark All As Read</a>
-                                </div>
-                            </div>
-                            <div class="dropdown-list-content dropdown-list-message">
-                                <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar
-											text-white"> <img alt="image"
-                                            src="assets/img/users/user-1.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">John
-                                            Deo</span>
-                                        <span class="time messege-text">Please check your mail !!</span>
-                                        <span class="time">2 Min Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="assets/img/users/user-2.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
-                                            Smith</span> <span class="time messege-text">Request for leave
-                                            application</span>
-                                        <span class="time">5 Min Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="assets/img/users/user-5.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Jacob
-                                            Ryan</span> <span class="time messege-text">Your payment invoice is
-                                            generated.</span> <span class="time">12 Min Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="assets/img/users/user-4.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Lina
-                                            Smith</span> <span class="time messege-text">hii John, I have upload
-                                            doc
-                                            related to task.</span> <span class="time">30
-                                            Min Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="assets/img/users/user-3.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Jalpa
-                                            Joshi</span> <span class="time messege-text">Please do as specify.
-                                            Let me
-                                            know if you have any query.</span> <span class="time">1
-                                            Days Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="assets/img/users/user-2.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
-                                            Smith</span> <span class="time messege-text">Client Requirements</span>
-                                        <span class="time">2 Days Ago</span>
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="dropdown-footer text-center">
-                                <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                            class="nav-link notification-toggle nav-link-lg"><i data-feather="bell"
-                                class="bell"></i>
+                            class="nav-link notification-toggle nav-link-lg"><i data-feather="bell" class="bell"></i>
                         </a>
                         <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
                             <div class="dropdown-header">
@@ -131,38 +62,7 @@
                                 </div>
                             </div>
                             <div class="dropdown-list-content dropdown-list-icons">
-                                <a href="#" class="dropdown-item dropdown-item-unread"> <span
-                                        class="dropdown-item-icon bg-primary text-white"> <i
-                                            class="fas
-												fa-code"></i>
-                                    </span> <span class="dropdown-item-desc"> Template update is
-                                        available now! <span class="time">2 Min
-                                            Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-info text-white"> <i
-                                            class="far
-												fa-user"></i>
-                                    </span> <span class="dropdown-item-desc"> <b>You</b> and <b>Dedik
-                                            Sugiharto</b> are now friends <span class="time">10 Hours
-                                            Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-success text-white"> <i
-                                            class="fas
-												fa-check"></i>
-                                    </span> <span class="dropdown-item-desc"> <b>Kusnaedi</b> has
-                                        moved task <b>Fix bug header</b> to <b>Done</b> <span class="time">12
-                                            Hours
-                                            Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-danger text-white"> <i
-                                            class="fas fa-exclamation-triangle"></i>
-                                    </span> <span class="dropdown-item-desc"> Low disk space. Let's
-                                        clean it! <span class="time">17 Hours Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
+                                <a href="#" class="dropdown-item"> <span
                                         class="dropdown-item-icon bg-info text-white"> <i
                                             class="fas
 												fa-bell"></i>
@@ -178,17 +78,19 @@
                     </li>
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
-                                src="assets/img/user.png" class="user-img-radious-style"> <span
+                                src="{{ asset('admin_assets/img/user.png') }}" class="user-img-radious-style"> <span
                                 class="d-sm-none d-lg-inline-block"></span></a>
                         <div class="dropdown-menu dropdown-menu-right pullDown">
-                            <div class="dropdown-title">Hello Sarah Smith</div>
+                            <div class="dropdown-title"><b>Hello {{ Auth::user()->name }}</b></div>
                             <a href="{{ route('profile.show') }}" class="dropdown-item has-icon"> <i
                                     class="far
 										fa-user"></i> Profile
                             </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <a href="{{ route('logout') }}" onclick="event.preventDefault();  this.closest('form').submit(); " role="button" class="dropdown-item has-icon text-danger">
+                                <a href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();  this.closest('form').submit(); " role="button"
+                                    class="dropdown-item has-icon text-danger">
                                     <i class="fas fa-sign-out-alt"></i>
                                     {{ __('Log Out') }}
                                 </a>
@@ -200,27 +102,50 @@
             <div class="main-sidebar sidebar-style-2">
                 <aside id="sidebar-wrapper">
                     <div class="sidebar-brand">
-                        <a href="index.html"> <img alt="image" src="{{ asset('admin_assets/img/logo.png') }}"
+                        <a href="{{url('admin/dashboard')}}"> <img alt="image" src="{{ asset('admin_assets/img/logo.png') }}"
                                 class="header-logo" /> <span class="logo-name">Otika</span>
                         </a>
                     </div>
+                    @php
+                        $url = Route::current()->uri;
+                    @endphp
                     <ul class="sidebar-menu">
-                        <li class="menu-header">Main</li>
-                        <li class="dropdown active">
+                        {{-- <li class="menu-header"></li> --}}
+                        <br>
+                        <li class="dropdown @if ($url == 'admin/dashboard') active @endif ">
                             <a href="{{ route('admin.dashboard') }}" class="nav-link"><i
                                     data-feather="monitor"></i><span>Dashboard</span></a>
                         </li>
 
-                        <li class="dropdown ">
+                        <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
                             <a href="{{ route('admin.printing.press') }}" class="nav-link"><i
                                     data-feather="mail"></i><span>Printing press</span></a>
                         </li>
 
-                        <li class="dropdown active">
+                        <li class="dropdown @if ($url == 'admin/store/book') active @endif ">
                             <a href="{{ route('admin.store.book') }}" class="nav-link">
-                                <i data-feather="globe"></i>
+                                <i data-feather="shopping-bag"></i>
                                 <span>Book Storage</span></a>
                         </li>
+
+                        <li class="dropdown @if ($url == 'admin/create/user') active @endif ">
+                            <a href="{{ route('admin.create.user') }}" class="nav-link">
+                                <i data-feather="user"></i>
+                                <span>Create User</span></a>
+                        </li>
+
+                        <li class="dropdown @if ($url == 'admin/create/subject') active @endif ">
+                            <a href="{{ route('admin.create.subject') }}" class="nav-link">
+                                <i data-feather="book"></i>
+                                <span>Create Subject</span></a>
+                        </li>
+
+                        <li class="dropdown @if ($url == 'admin/create/class') active @endif ">
+                            <a href="{{ route('admin.create.class') }}" class="nav-link">
+                                <i data-feather="plus"></i>
+                                <span>Create Class</span></a>
+                        </li>
+
 
 
 
@@ -286,8 +211,5 @@
     </script>
 
 </body>
-
-
-<!-- index.html  21 Nov 2019 03:47:04 GMT -->
 
 </html>

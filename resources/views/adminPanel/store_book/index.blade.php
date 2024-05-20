@@ -19,6 +19,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Press name</th>
+                                        <th>Class</th>
                                         <th>Subject name</th>
                                         <th>Total Book</th>
                                         <th>Action</th>
@@ -49,7 +50,7 @@
                         <div class="form-group">
                             <label>Printing Press</label>
                             <div class="input-group">
-                                <select class="form-control" id="exampleFormControlSelect1" name="printingPressID">
+                                <select class="form-control" name="printingPressID">
                                     @foreach ($printingPress as $Press)
                                         <option value="{{ $Press->id }}">{{ $Press->name }}</option>
                                     @endforeach
@@ -57,10 +58,25 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label>Class</label>
+                            <div class="input-group">
+                                <select class="form-control" id="classSelect" name="classID">
+                                    <option value="" selected disabled>Select a class</option>
+                                    @foreach ($classes as $class)
+                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="subjectGroup" style="display: none;">
                             <label>Subject</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Enter subject" name="subject"
-                                    required>
+                                <select class="form-control" id="subjectSelect" name="subjectID">
+                                    <option value="">Select a subject</option>
+                                    @foreach ($subjects as $subject)
+                                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -78,6 +94,7 @@
         </div>
     </div>
 
+
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editFormModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -90,12 +107,24 @@
                 <div class="modal-body">
                     <form id="editBookStoreForm">
                         <input type="hidden" name="id" id="editStorageId">
+
                         <div class="form-group">
                             <label>Printing Press</label>
                             <div class="input-group">
-                                <select class="form-control" name="printingPressID" id="editPressId">
+                                <select class="form-control" id="printingPressSelect" name="printingPressID">
                                     @foreach ($printingPress as $Press)
                                         <option value="{{ $Press->id }}">{{ $Press->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Class</label>
+                            <div class="input-group">
+                                <select class="form-control" id="editclassSelect" name="classID">
+                                    @foreach ($classes as $class)
+                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -103,17 +132,24 @@
                         <div class="form-group">
                             <label>Subject</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Enter subject" name="subject"
-                                    id="editSubjectName" required>
+                                <select class="form-control" id="editSubjectSelect" name="subjectID">
+                                    <option value="" disabled>Select a subject</option>
+                                    @foreach ($subjects as $subject)
+                                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label>Total Book</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" placeholder="Enter total book" name="total_book"
-                                    id="editTotalBook" required>
+                                <input type="number" class="form-control" id="editTotalBook"
+                                    placeholder="Enter total book" name="total_book" required>
                             </div>
                         </div>
+
+
                         <button type="button" class="btn btn-primary m-t-15 waves-effect"
                             onclick="editSubmitBook()">Submit</button>
                     </form>
@@ -125,8 +161,24 @@
 
 
 
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        $(document).ready(function() {
+            fetchBookStorageData();
+            $('#bookStoreForm')[0].reset();
+            $('#subjectGroup').hide();
+            $('#classSelect').on('change', function() {
+                if ($(this).val()) {
+                    $('#subjectGroup').show();
+                } else {
+                    $('#subjectGroup').hide();
+                    $('#subjectSelect').val(''); // Reset subject dropdown
+                }
+            });
+        });
+
         function fetchBookStorageData() {
             $.ajax({
                 url: '{{ route('admin.get.book.storage.data') }}',
@@ -168,22 +220,50 @@
                 method: 'GET',
                 success: function(data) {
                     $('#editStorageId').val(data.id);
-                    $('#editPressId').val(data.printing_press_id);
-                    $('#editSubjectName').val(data.subject_name);
+                    $('#printingPressSelect').val(data.printing_press_id);
+                    $('#editclassSelect').val(data.class_id);
+                    $('#editSubjectSelect').val(data.subject_id);
                     $('#editTotalBook').val(data.total_book);
 
-                    // Ensure the correct printing press is selected
-                    $('#editPressId').val(data.printing_press_id).trigger('change');
 
+                    $('#printingPressSelect').val(data.printing_press_id).trigger('change');
+                    $('#editclassSelect').val(data.class_id).trigger('change');
+                    $('#editSubjectSelect').val(data.subject_id).trigger('change');
+                    $('#editTotalBook').val(data.total_book).trigger('change');
+
+
+                    // Show the modal
                     $('#editModal').modal('show');
+
+
                 },
                 error: function(error) {
-                    console.error('Error fetching printing press data:', error);
+                    console.error('Error fetching book storage data:', error);
                 }
             });
         }
 
-        function editSubmitBook(){
+
+
+
+        function fetchSubjectsByClass(classId) {
+            $.ajax({
+                url: `{{ url('admin/get/subjects') }}/${classId}`,
+                method: 'GET',
+                success: function(subjects) {
+                    let options = '<option value="">Select subject</option>';
+                    subjects.forEach(subject => {
+                        options += `<option value="${subject.id}">${subject.name}</option>`;
+                    });
+                    $('#editSubjectSelect').html(options);
+                },
+                error: function(error) {
+                    console.error('Error fetching subjects:', error);
+                }
+            });
+        }
+
+        function editSubmitBook() {
 
             const form = $('#editBookStoreForm');
             const id = $('#editStorageId').val();
@@ -208,8 +288,6 @@
             });
         }
 
-
-
         function deleteBookStorage(id) {
             if (confirm('Are you sure you want to delete this book storage?')) {
                 $.ajax({
@@ -230,8 +308,41 @@
             }
         }
 
-        $(document).ready(function() {
-            fetchBookStorageData();
+        // Fetch subjects based on class selection
+        $('#classSelect').change(function() {
+            const classId = $(this).val();
+            $.ajax({
+                url: `{{ url('admin/get/subjects') }}/${classId}`,
+                method: 'GET',
+                success: function(subjects) {
+                    let options = '<option value="">Select a subject</option>';
+                    subjects.forEach(subject => {
+                        options += `<option value="${subject.id}">${subject.name}</option>`;
+                    });
+                    $('#subjectSelect').html(options);
+                },
+                error: function(error) {
+                    console.error('Error fetching subjects:', error);
+                }
+            });
+        });
+
+        $('#editclassSelect').change(function() {
+            const classId = $(this).val();
+            $.ajax({
+                url: `{{ url('admin/get/subjects') }}/${classId}`,
+                method: 'GET',
+                success: function(subjects) {
+                    let options = '<option value="">Select a subject</option>';
+                    subjects.forEach(subject => {
+                        options += `<option value="${subject.id}">${subject.name}</option>`;
+                    });
+                    $('#editSubjectSelect').html(options);
+                },
+                error: function(error) {
+                    console.error('Error fetching subjects:', error);
+                }
+            });
         });
     </script>
 @endsection
