@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\distributorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ThemeController;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/dashboard', function () {
         if (Auth::user()->role_id == 1) {
             return redirect()->route('admin.dashboard');
+        }elseif (Auth::user()->role_id == 2) {
+            return redirect()->route('distributor.dashboard');
         }
         return view('dashboard'); // Or any other user dashboard
     });
@@ -58,6 +61,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::put('store/book/update/data/{id} ', 'bookStorageUpdate')->name('admin.get.book.storage.update');
         Route::delete('store/book/delete/{id}', 'bookStorageDestroy')->name('admin.printing.press.delete');
 
+        //storage alert
+        Route::get('storage/alert', 'storageAlert')->name('admin.storage.alert');
+        Route::get('get/storage/data', 'storageTableData')->name('admin.storage.data');
+
+
         //create users
         Route::get('create/user', 'userIndex')->name('admin.create.user');
         Route::post('user/store', 'userStore')->name('admin.user.store');
@@ -83,6 +91,32 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::put('subject/update/data/{id} ', 'subjectUpdate')->name('admin.subject.update');
         Route::delete('subject/delete/{id}', 'subjectDestroy')->name('admin.subject.delete');
 
+        //create seller
+        Route::get('create/selller', 'createSeller')->name('admin.create.seller');
+        Route::post('seller/store', 'sellerStore')->name('admin.selller.store');
+        Route::get('get/seller/data', 'sellerTableData')->name('admin.get.seller.data');
+        Route::get('get/seller/edit/data/{id}', 'sellerEdit')->name('admin.get.seller.edit');
+        Route::put('seller/update/data/{id} ', 'sellerUpdate')->name('admin.seller.update');
+        Route::delete('seller/delete/{id}', 'sellerDestroy')->name('admin.seller.delete');
+
+
+        //Book transfer to seller
+        Route::get('books/transfer/to/selller', 'transferSeller')->name('admin.transfer.to.seller');
+        Route::post('book/transfer/list', 'transferStore')->name('admin.transfer.store');
+        Route::get('get/transfer/data', 'transferTableData')->name('admin.get.transfer.data');
+        Route::get('get/transfer/edit/data/{id}', 'transferEdit')->name('admin.get.transfer.edit');
+        Route::put('transfer/update/data/{id} ', 'transferUpdate')->name('admin.transfer.update');
+        Route::delete('transfer/delete/{id}', 'transferDestroy')->name('admin.transfer.delete');
+
+
+    });
+
+
+    Route::prefix('distributor')->middleware('auth', 'distributor')->controller(distributorController::class)->group(function () {
+
+        Route::get('dashboard', function () {
+            return view('adminPanel/dashboard');
+        })->name('distributor.dashboard');
 
     });
 

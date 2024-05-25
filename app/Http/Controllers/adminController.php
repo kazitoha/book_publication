@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookInSeller;
 use App\Models\Classes;
 use App\Models\PrintingPress;
 use App\Models\Roles;
@@ -10,6 +11,8 @@ use App\Models\Subjects;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+
 
 class adminController extends Controller
 {
@@ -83,7 +86,7 @@ class adminController extends Controller
         $printingPress = PrintingPress::all();
         $classes = Classes::all();
         $subjects = Subjects::all();
-        return view('adminPanel.store_book.index', compact('printingPress','classes','subjects'));
+        return view('adminPanel.store_book.index', compact('printingPress', 'classes', 'subjects'));
     }
 
     public function getSubjectsByClass(Request $request, $classId)
@@ -102,19 +105,42 @@ class adminController extends Controller
 
     function bookStorageStore(Request $request)
     {
+
         $request->validate([
             'printingPressID' => 'required|string|max:255',
             'classID' => 'required|',
             'subjectID' => 'required|string',
-            'total_book' => 'required|numeric',
+            'unit_price' => 'required|string',
+            'total_unit' => 'required|numeric',
+            'paid_amount' => 'nullable|string',
+            'unpaid_amount' => 'required|string',
         ]);
 
         $storeBook = new StoreBook();
         $storeBook->printing_press_id = $request->input('printingPressID');
         $storeBook->class_id = $request->input('classID');
         $storeBook->subject_id = $request->input('subjectID');
-        $storeBook->total_book = $request->input('total_book');
+        $storeBook->unit_price = $request->input('unit_price');
+        $storeBook->total_unit = $request->input('total_unit');
+        $storeBook->paid_amount = $request->input('paid_amount');
+        $storeBook->unpaid_amount = $request->input('unpaid_amount');
         $storeBook->save();
+
+        $subject_detail = Subjects::find($request->input('subjectID'));
+
+        if ($subject_detail->null) {
+            $subject_detail->update([
+                'total_unit' => $request->input('total_unit'),
+            ]);
+        } else {
+            $total_books_in_this_subject = $subject_detail->total_unit + $request->input('total_unit');
+            $subject_detail->update([
+                'total_unit' => $total_books_in_this_subject,
+            ]);
+        }
+
+        //  $printing_press_amount = ($request->unit_price * $request->total_unit) - $request->paid_amount;
+
 
         return response()->json(['message' => 'Book Store successfully']);
     }
@@ -156,6 +182,200 @@ class adminController extends Controller
 
 
 
+    //storage alert
+
+    public function storageAlert(){
+        return view('adminPanel.storage_alert.storage_alert');
+    }
+
+    function storageTableData()
+    {
+        $lowStockAlert=Subjects::with('classes')->where('total_unit', '<', 10)->get();
+
+        $html = view('adminPanel.storage_alert.alert_list', compact('lowStockAlert'))->render();
+        return response()->json(['html' => $html]);
+    }
+
+
+
+
+
+
+
+    //seller management
+
+    function createSeller()
+    {
+        return view('adminPanel.add_seller.add_seller');
+    }
+
+    function sellerStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:5120',
+        ]);
+
+        $last_insert_id = User::insertGetId([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => 2,
+        ]);
+
+        if ($request->hasFile('image')) {
+
+            $path = $request->file('image')->store('seller', 'public');
+
+            User::find($last_insert_id)->update(['image' => $path,]);
+        }
+
+        return response()->json(['message' => 'User Create successfully!']);
+    }
+
+    function sellerTableData()
+    {
+        $users = User::where('role_id', 2)->with('roles')->orderBy('id', 'desc')->get();
+        $html = view('adminPanel.add_seller.seller_list', compact('users'))->render();
+        return response()->json(['html' => $html]);
+    }
+
+
+    public function sellerEdit($id)
+    {
+        $users = User::find($id);
+        return response()->json($users);
+    }
+
+    public function sellerUpdate(Request $request, $id)
+    {
+
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'password' => 'nullable|string|min:8',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:5120',
+        ]);
+
+        $user = User::find($id);
+
+        if ($user->email != $request->email) {
+            $request->validate([
+                'email' => 'required|string|email|max:255|unique:users',
+            ]);
+        }
+
+        $user->name = $request->name;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->password = Hash::make($request->password);
+        $user->email = $request->email;
+        $user->role_id = 2;
+
+
+        if ($request->hasFile('image')) {
+            // Delete the old image if exists
+            if ($user->image) {
+                Storage::disk('public')->delete($user->image);
+            }
+            // Store the new image
+            $path = $request->file('image')->store('seller', 'public');
+            $user->image = $path;
+        }
+
+        $user->save();
+
+        return response()->json(['message' => 'User Update successfully']);
+    }
+
+    public function sellerDestroy($id)
+    {
+        $seller_details = User::findOrFail($id);
+        if ($seller_details->image) {
+            Storage::disk('public')->delete($seller_details->image);
+        }
+        $seller_details->delete();
+        return response()->json(['message' => 'User Deleted successfully']);
+    }
+
+
+
+    //Book transfer to seller
+
+    public function transferSeller()
+    {
+        $sellers = User::where('role_id', 2)->get();
+        $printingPress = PrintingPress::all();
+        $classes = Classes::all();
+        $subjects = Subjects::all();
+        $bookStorages = StoreBook::with('printingPress')->with('subject')->with('classes')->orderBy('id', 'desc')->get();
+
+        return view('adminPanel.transfer_to_seller.transfer_to_seller', compact('sellers', 'printingPress', 'classes', 'subjects'));
+    }
+
+    public function transferTableData()
+    {
+
+        $booksInSeller = BookInSeller::with('class')->with('subject')->with('seller')->orderBy('id', 'desc')->get();
+
+        $html = view('adminPanel.transfer_to_seller.books_transfer_list', compact('booksInSeller'))->render();
+        return response()->json(['html' => $html]);
+    }
+
+    function transferStore(Request $request)
+    {
+
+
+        //    return $request->all();
+
+        $request->validate([
+            'sellerId' => 'required|string|max:255',
+            'classID' => 'required|',
+            'subjectID' => 'required|string',
+            'total_unit' => 'required|string',
+        ]);
+
+
+        $subject_detail = Subjects::find($request->input('subjectID'));
+
+        if ($subject_detail->total_unit >= $request->input('total_unit')) {
+
+            $bookInseller = new BookInSeller();
+            $bookInseller->seller_id = $request->input('sellerId');
+            $bookInseller->class_id = $request->input('classID');
+            $bookInseller->subject_id = $request->input('subjectID');
+            $bookInseller->total_unit = $request->input('total_unit');
+            $bookInseller->save();
+
+            $total_books_in_this_subject = $subject_detail->total_unit - $request->input('total_unit');
+            $subject_detail->update([
+                'total_unit' => $total_books_in_this_subject,
+            ]);
+
+            return response()->json(['message' => 'Book Store successfully'], 200);
+        } else {
+            return response()->json(['message' => 'This amount of quantity of books is not available'], 400);
+
+        }
+
+
+
+
+
+
+
+    }
+
+
+
 
 
 
@@ -166,7 +386,7 @@ class adminController extends Controller
     {
         $roles = Roles::all();
 
-        return view('adminPanel.user.index',compact('roles'));
+        return view('adminPanel.user.index', compact('roles'));
     }
 
     function userStore(Request $request)
@@ -182,7 +402,7 @@ class adminController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id'=>$request->role_id,
+            'role_id' => $request->role_id,
         ]);
 
         return response()->json(['message' => 'User Create successfully!']);
@@ -212,7 +432,7 @@ class adminController extends Controller
             'password' => 'nullable|string|min:8',
         ]);
 
-        if($user->email != $request->email){
+        if ($user->email != $request->email) {
             $request->validate([
                 'email' => 'required|string|email|max:255|unique:users',
             ]);
@@ -242,13 +462,13 @@ class adminController extends Controller
 
 
 
-   //class methods
+    //class methods
 
 
     function classIndex()
     {
         $classes = Classes::all();
-        return view('adminPanel.classes.index',compact('classes'));
+        return view('adminPanel.classes.index', compact('classes'));
     }
 
     function classStore(Request $request)
@@ -306,14 +526,14 @@ class adminController extends Controller
 
 
 
-   //subject methods
+    //subject methods
 
 
 
     function subjectIndex()
     {
         $classes = Classes::all();
-        return view('adminPanel.subject.index',compact('classes'));
+        return view('adminPanel.subject.index', compact('classes'));
     }
 
     function subjectStore(Request $request)
@@ -325,7 +545,7 @@ class adminController extends Controller
         ]);
 
         Subjects::create([
-            'class_id'=>$request->class_id,
+            'class_id' => $request->class_id,
             'name' => $request->name,
         ]);
 

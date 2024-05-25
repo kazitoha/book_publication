@@ -11,8 +11,11 @@ class StoreBook extends Model
     protected $table='store_book';
     protected $fillable = [
         'printing_press_id',
-        'subject_name',
-        'total_book',
+        'class_id',
+        'subject_id',
+        'unit_price',
+        'total_unit',
+        'paid_amount',
     ];
 
     public function printingPress()

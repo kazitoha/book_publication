@@ -28,7 +28,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
-        'theme_layout', 'sidebar_color', 'theme_color', 'sticky_header', 'sidebar_mini',
+        'phone',
+        'address',
+        'image',
     ];
 
     public function roles()

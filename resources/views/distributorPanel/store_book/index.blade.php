@@ -2,88 +2,6 @@
 
 @section('adminpanel-navbar')
     <section class="section">
-        <div class="section-body">
-            <div class="row">
-                <div class="col-12 col-md-12 col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Store Book</h4>
-                        </div>
-                        <form id="bookStoreForm"s>
-                        <div class="card-body">
-                            <div class="form-row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="validationDefault01"> Printing Press</label>
-                                    <select class="form-control" name="printingPressID">
-                                        <option value="" selected disabled>Select a printing press</option>
-                                        @foreach ($printingPress as $Press)
-                                            <option value="{{ $Press->id }}">{{ $Press->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Class</label>
-                                    <select class="form-control" id="classSelect" name="classID">
-                                        <option value="" selected disabled>Select a class</option>
-                                        @foreach ($classes as $class)
-                                            <option value="{{ $class->id }}">{{ $class->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4 mb-3" id="subjectGroup" style="display: none;">
-                                    <label>Subject</label>
-                                    <div class="input-group">
-                                        <select class="form-control" id="subjectSelect" name="subjectID">
-                                            <option value="">Select a subject</option>
-                                            @foreach ($subjects as $subject)
-                                                <option value="{{ $subject->id }}">{{ $subject->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Unit Price</label>
-                                    <input type="text" class="form-control"  name="unit_price" id="unitPrice" onkeypress="totalUnitPrice()"
-                                        placeholder="Enter per unit price" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Total Unit</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control"  name="total_unit" id="totalAmount" onkeyup="totalUnitPrice()"  placeholder="Enter total unit"
-                                           required>
-                                    </div>
-
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Paid Amount</label>
-                                    <input type="text" class="form-control" id="paid" name="paid_amount" onkeyup="totalUnitPrice()"
-                                        placeholder="Total paid amount" required>
-                                        <span>Total ammount: <b id="total"></b></span>
-
-                                    <input type="hidden"  class="form-control" id="unpaid" name="unpaid_amount"
-                                        placeholder="Un-paid amount" required>
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <button type="button"  onclick="submitForm()" class="btn btn-primary" >Store Books</button>
-                        </div>
-                    </form>
-
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-
-
-
-    <section class="section">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -103,9 +21,7 @@
                                         <th>Press name</th>
                                         <th>Class</th>
                                         <th>Subject name</th>
-                                        <th>Total unit</th>
-                                        <th>Paid amount</th>
-                                        <th>Unpaid amount</th>
+                                        <th>Total Book</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -166,8 +82,8 @@
                         <div class="form-group">
                             <label>Total Book</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" placeholder="Enter total book"
-                                    name="total_book" required>
+                                <input type="number" class="form-control" placeholder="Enter total book" name="total_book"
+                                    required>
                             </div>
                         </div>
                         <button type="button" class="btn btn-primary m-t-15 waves-effect"
@@ -179,8 +95,7 @@
     </div>
 
 
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editFormModal"
-        aria-hidden="true">
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editFormModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -264,20 +179,6 @@
             });
         });
 
-        function totalUnitPrice(){
-            var totalAmount = $('#totalAmount').val();
-            var unitPrice = $('#unitPrice').val();
-
-            var total = totalAmount * unitPrice;
-            $('#total').text(total);
-
-            var paid = $('#paid').val();
-            var unpaid = total - paid;
-
-            $('#unpaid').val(unpaid);
-        }
-
-
         function fetchBookStorageData() {
             $.ajax({
                 url: '{{ route('admin.get.book.storage.data') }}',
@@ -306,22 +207,9 @@
                     $('#exampleModal').modal('hide');
                     fetchBookStorageData();
                 },
-                error: function(xhr) {
-                    if (xhr.status === 422) {
-                        // Validation error
-                        const errors = xhr.responseJSON.errors;
-                        let errorMessages = '';
-                        for (let key in errors) {
-                            if (errors.hasOwnProperty(key)) {
-                                errorMessages += errors[key][0] + '\n';
-                            }
-                        }
-                        toastr.error(errorMessages);
-                    } else {
-                        // Other errors
-                        toastr.error('Error creating.');
-                        console.error('Error:', xhr);
-                    }
+                error: function(error) {
+                    toastr.error('Error adding book quantity.');
+                    console.error('Error:', error);
                 }
             });
         }

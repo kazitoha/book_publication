@@ -12,6 +12,7 @@ class PrintingPress extends Model
     protected $fillable = [
         'name',
         'address',
+        'un_paid',
     ];
 
 }

@@ -11,6 +11,7 @@ class Subjects extends Model
     protected $fillable = [
         'class_id',
         'name',
+        'total_unit',
     ];
 
 

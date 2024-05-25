@@ -7,17 +7,17 @@
                 <div class="col-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Store Book</h4>
+                            <h4>Transfer books to seller</h4>
                         </div>
-                        <form id="bookStoreForm"s>
+                        <form id="storeForm"s>
                         <div class="card-body">
                             <div class="form-row">
                                 <div class="col-md-4 mb-3">
-                                    <label for="validationDefault01"> Printing Press</label>
-                                    <select class="form-control" name="printingPressID">
-                                        <option value="" selected disabled>Select a printing press</option>
-                                        @foreach ($printingPress as $Press)
-                                            <option value="{{ $Press->id }}">{{ $Press->name }}</option>
+                                    <label for="validationDefault01"> Seller</label>
+                                    <select class="form-control" name="sellerId">
+                                        <option value="" selected disabled>Select a seller</option>
+                                        @foreach ($sellers as $seller)
+                                            <option value="{{ $seller->id }}">{{ $seller->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -42,11 +42,6 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label>Unit Price</label>
-                                    <input type="text" class="form-control"  name="unit_price" id="unitPrice" onkeypress="totalUnitPrice()"
-                                        placeholder="Enter per unit price" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
                                     <label>Total Unit</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control"  name="total_unit" id="totalAmount" onkeyup="totalUnitPrice()"  placeholder="Enter total unit"
@@ -54,16 +49,6 @@
                                     </div>
 
                                 </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Paid Amount</label>
-                                    <input type="text" class="form-control" id="paid" name="paid_amount" onkeyup="totalUnitPrice()"
-                                        placeholder="Total paid amount" required>
-                                        <span>Total ammount: <b id="total"></b></span>
-
-                                    <input type="hidden"  class="form-control" id="unpaid" name="unpaid_amount"
-                                        placeholder="Un-paid amount" required>
-                                </div>
-
 
                             </div>
                         </div>
@@ -89,10 +74,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Total Book Storage List</h4>
-                        <div class="card-body" style="text-align: right;">
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#exampleModal">Storage Book</button>
-                        </div>
+
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -100,12 +82,10 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Press name</th>
+                                        <th>Seller name</th>
                                         <th>Class</th>
                                         <th>Subject name</th>
                                         <th>Total unit</th>
-                                        <th>Paid amount</th>
-                                        <th>Unpaid amount</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -120,63 +100,7 @@
         </div>
     </section>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="formModal" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Store Book</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="bookStoreForm">
-                        <div class="form-group">
-                            <label>Printing Press</label>
-                            <div class="input-group">
-                                <select class="form-control" name="printingPressID">
-                                    @foreach ($printingPress as $Press)
-                                        <option value="{{ $Press->id }}">{{ $Press->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Class</label>
-                            <div class="input-group">
-                                <select class="form-control" id="classSelect" name="classID">
-                                    <option value="" selected disabled>Select a class</option>
-                                    @foreach ($classes as $class)
-                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group" id="subjectGroup" style="display: none;">
-                            <label>Subject</label>
-                            <div class="input-group">
-                                <select class="form-control" id="subjectSelect" name="subjectID">
-                                    <option value="">Select a subject</option>
-                                    @foreach ($subjects as $subject)
-                                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Total Book</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" placeholder="Enter total book"
-                                    name="total_book" required>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-primary m-t-15 waves-effect"
-                            onclick="submitForm()">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editFormModal"
@@ -184,7 +108,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editFormModal">Edit Book Storage</h5>
+                    <h5 class="modal-title" id="editFormModal">Edit Books Transfer</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -247,7 +171,6 @@
 
 
 
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -279,8 +202,9 @@
 
 
         function fetchBookStorageData() {
+
             $.ajax({
-                url: '{{ route('admin.get.book.storage.data') }}',
+                url: '{{ route('admin.get.transfer.data') }}',
                 method: 'GET',
                 success: function(response) {
                     $('#storeBookTableBody').html(response.html);
@@ -292,16 +216,17 @@
         }
 
         function submitForm() {
-            const form = $('#bookStoreForm');
+            const form = $('#storeForm');
             $.ajax({
-                url: '{{ route('admin.store.book.store') }}',
+                url: '{{ route('admin.transfer.store') }}',
                 method: 'POST',
                 data: form.serialize(),
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(data) {
-                    toastr.success('Book quantity added successfully!');
+                    console.log(data);
+                    toastr.success(data.message);
                     form[0].reset();
                     $('#exampleModal').modal('hide');
                     fetchBookStorageData();
