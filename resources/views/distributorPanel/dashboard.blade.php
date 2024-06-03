@@ -1,4 +1,4 @@
-@extends('adminPanel/navbar')
+@extends('distributorPanel/navbar')
 
 @section('adminpanel-navbar')
 @php

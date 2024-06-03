@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BookInSeller;
+use App\Models\Sell;
 use App\Models\Classes;
 use App\Models\PrintingPress;
 use App\Models\Roles;
@@ -12,6 +12,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class adminController extends Controller
@@ -173,6 +175,7 @@ class adminController extends Controller
         return response()->json(['message' => 'Book Update successfully']);
     }
 
+
     public function bookStorageDestroy($id)
     {
         StoreBook::destroy($id);
@@ -305,78 +308,6 @@ class adminController extends Controller
         $seller_details->delete();
         return response()->json(['message' => 'User Deleted successfully']);
     }
-
-
-
-    //Book transfer to seller
-
-    public function transferSeller()
-    {
-        $sellers = User::where('role_id', 2)->get();
-        $printingPress = PrintingPress::all();
-        $classes = Classes::all();
-        $subjects = Subjects::all();
-        $bookStorages = StoreBook::with('printingPress')->with('subject')->with('classes')->orderBy('id', 'desc')->get();
-
-        return view('adminPanel.transfer_to_seller.transfer_to_seller', compact('sellers', 'printingPress', 'classes', 'subjects'));
-    }
-
-    public function transferTableData()
-    {
-
-        $booksInSeller = BookInSeller::with('class')->with('subject')->with('seller')->orderBy('id', 'desc')->get();
-
-        $html = view('adminPanel.transfer_to_seller.books_transfer_list', compact('booksInSeller'))->render();
-        return response()->json(['html' => $html]);
-    }
-
-    function transferStore(Request $request)
-    {
-
-
-        //    return $request->all();
-
-        $request->validate([
-            'sellerId' => 'required|string|max:255',
-            'classID' => 'required|',
-            'subjectID' => 'required|string',
-            'total_unit' => 'required|string',
-        ]);
-
-
-        $subject_detail = Subjects::find($request->input('subjectID'));
-
-        if ($subject_detail->total_unit >= $request->input('total_unit')) {
-
-            $bookInseller = new BookInSeller();
-            $bookInseller->seller_id = $request->input('sellerId');
-            $bookInseller->class_id = $request->input('classID');
-            $bookInseller->subject_id = $request->input('subjectID');
-            $bookInseller->total_unit = $request->input('total_unit');
-            $bookInseller->save();
-
-            $total_books_in_this_subject = $subject_detail->total_unit - $request->input('total_unit');
-            $subject_detail->update([
-                'total_unit' => $total_books_in_this_subject,
-            ]);
-
-            return response()->json(['message' => 'Book Store successfully'], 200);
-        } else {
-            return response()->json(['message' => 'This amount of quantity of books is not available'], 400);
-
-        }
-
-
-
-
-
-
-
-    }
-
-
-
-
 
 
 
@@ -587,6 +518,142 @@ class adminController extends Controller
         Subjects::destroy($id);
         return response()->json(['message' => 'Deleted successfully']);
     }
+
+
+
+
+
+    //sell
+
+    public function getSellerUnpaidAmount(Request $request, $sellerId)
+    {
+        $sellers = User::find($sellerId);
+        return response()->json($sellers);
+    }
+
+    public function bookUnitPrice(Request $request, $sellerId)
+    {
+        $unitPrice=StoreBook::where('subject_id', $sellerId)->select('unit_price')->latest()->first();
+        return $unitPrice;
+    }
+
+
+
+    public function createSell()
+    {
+
+        $sellers = User::where('role_id', 2)->get();
+        $printingPress = PrintingPress::all();
+        $classes = Classes::all();
+        $subjects = Subjects::all();
+        $bookStorages = StoreBook::with('printingPress')->with('subject')->with('classes')->orderBy('id', 'desc')->get();
+
+        return view('adminPanel.transfer_to_seller.transfer_to_seller', compact('sellers', 'printingPress', 'classes', 'subjects'));
+    }
+
+    public function sellTableData()
+    {
+
+        $booksInSeller = Sell::with('class')->with('subject')->with('seller')->orderBy('id', 'desc')->get();
+
+        $html = view('adminPanel.transfer_to_seller.books_transfer_list', compact('booksInSeller'))->render();
+        return response()->json(['html' => $html]);
+    }
+
+    function sellStore(Request $request)
+    {
+        $request->validate([
+            'sellerID' => 'required',
+            'classID' => 'required',
+            'subjectID' => 'required',
+            'purchase_price'=>'required',
+            'unit_price' => 'required',
+            'total_unit' => 'required',
+            'paid_amount' => 'required',
+            'unpaid_amount' => 'required',
+        ]);
+
+        $subject_detail = Subjects::find($request->input('subjectID'));
+
+        if ($subject_detail->total_unit >= $request->input('total_unit')) {
+
+            $profit_per_unit=$request->input('unit_price') - $request->input('purchase_price');
+            $total_profit= $profit_per_unit * $request->input('total_unit');
+
+            $bookInseller = new Sell();
+            $bookInseller->seller_id = $request->input('sellerID');
+            $bookInseller->class_id = $request->input('classID');
+            $bookInseller->subject_id = $request->input('subjectID');
+            $bookInseller->purchase_price = $request->input('purchase_price');
+            $bookInseller->unit_price = $request->input('unit_price');
+            $bookInseller->total_unit = $request->input('total_unit');
+            $bookInseller->paid_amount = $request->input('paid_amount');
+            $bookInseller->unpaid_amount = $request->input('unpaid_amount');
+            $bookInseller->profit = $total_profit;
+            $bookInseller->save();
+
+            $total_books_in_this_subject = $subject_detail->total_unit - $request->input('total_unit');
+            $subject_detail->update([
+                'total_unit' => $total_books_in_this_subject,
+            ]);
+
+
+
+
+            return response()->json(['message' => 'Book Store successfully'], 200);
+
+        } else {
+            return response()->json(['message' => 'This amount of quantity of books is not available'], 400);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+    function sellInvoice($id)
+{
+    $sell_info = Sell::with('class', 'subject', 'seller')->find($id);
+
+    if (!$sell_info) {
+        return response()->json(['message' => 'Sell record not found'], 404);
+    }
+
+    $data = [
+        'id' => $sell_info->id,
+        'seller_name' => $sell_info->seller->name,
+        'seller_address' => $sell_info->seller->address,
+        'class_name' => $sell_info->class->name,
+        'subject_name' => $sell_info->subject->name,
+        'unit_price' => $sell_info->unit_price,
+        'total_unit' => $sell_info->total_unit,
+        'paid_amount' => $sell_info->paid_amount,
+        'unpaid_amount' => $sell_info->unpaid_amount,
+        'created'=>$sell_info->created_at->format(' F j, Y'),
+    ];
+
+    // Debug: Log data to ensure it's correct
+
+        $pdf = PDF::setPaper('a4', 'portrait')->loadView('adminPanel.transfer_to_seller.sell_invoice', $data);
+
+         $pdf_name = $sell_info->seller->name .".pdf";
+         return $pdf->download($pdf_name);
+
+
+    //  return view('adminPanel.transfer_to_seller.sell_invoice',compact('data'));
+}
+
+
 
 
 

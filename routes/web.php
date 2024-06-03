@@ -20,9 +20,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-
 
 
     Route::get('/dashboard', function () {
@@ -43,7 +41,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         })->name('admin.dashboard');
 
 
-        //printing presss
+        //printing press
         Route::get('printing/press', 'printingPressIndex')->name('admin.printing.press');
         Route::post('add/printing/press', 'printingPressStore')->name('admin.printing.store');
         Route::get('get/printing/press/data', 'printingPressTableData')->name('admin.get.printing.press.data');
@@ -52,9 +50,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::delete('printing/press/delete/{id}', 'printingPressDestroy')->name('admin.printing.press.delete');
 
 
+
+        //unpaid to printig press
+        Route::get('printing/press/unpaid', 'printingPressIndex')->name('admin.printing.press.unpaid');
+
+        //common route
+        Route::get('get/subjects/{classId}', 'getSubjectsByClass');
+        Route::get('get/seller/{sellerId}', 'getSellerUnpaidAmount');
+        Route::get('get/unit/price/{unitPrice}', 'bookUnitPrice');
+
         //book storage
         Route::get('store/book', 'bookStorageIndex')->name('admin.store.book');
-        Route::get('get/subjects/{classId}', 'getSubjectsByClass');
         Route::post('store/book/store', 'bookStorageStore')->name('admin.store.book.store');
         Route::get('get/book/storage/data', 'bookStorageTable')->name('admin.get.book.storage.data');
         Route::get('get/book/storage/edit/data/{id}', 'bookStorageEdit')->name('admin.get.book.storage.edit');
@@ -94,19 +100,33 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         //create seller
         Route::get('create/selller', 'createSeller')->name('admin.create.seller');
         Route::post('seller/store', 'sellerStore')->name('admin.selller.store');
-        Route::get('get/seller/data', 'sellerTableData')->name('admin.get.seller.data');
+        Route::get('get/seller/', 'sellerTableData')->name('admin.get.seller.data');
         Route::get('get/seller/edit/data/{id}', 'sellerEdit')->name('admin.get.seller.edit');
         Route::put('seller/update/data/{id} ', 'sellerUpdate')->name('admin.seller.update');
         Route::delete('seller/delete/{id}', 'sellerDestroy')->name('admin.seller.delete');
 
 
-        //Book transfer to seller
-        Route::get('books/transfer/to/selller', 'transferSeller')->name('admin.transfer.to.seller');
-        Route::post('book/transfer/list', 'transferStore')->name('admin.transfer.store');
-        Route::get('get/transfer/data', 'transferTableData')->name('admin.get.transfer.data');
-        Route::get('get/transfer/edit/data/{id}', 'transferEdit')->name('admin.get.transfer.edit');
-        Route::put('transfer/update/data/{id} ', 'transferUpdate')->name('admin.transfer.update');
-        Route::delete('transfer/delete/{id}', 'transferDestroy')->name('admin.transfer.delete');
+
+
+        //expanse category
+        Route::get('account/create', 'transferTableData')->name('admin.account.create');
+        Route::get('account/deposit/create', 'transferTableData')->name('admin.account.deposit');
+        Route::get('account/expense', 'transferTableData')->name('admin.account.expense');
+        Route::get('account/expense/category', 'transferTableData')->name('admin.account.expense.category');
+
+
+
+        //sell
+        Route::get('sell/book', 'createSell')->name('admin.sell.book');
+        Route::post('sell/book/store', 'sellStore')->name('admin.sell.store');
+        Route::get('get/sell/book/data/list', 'sellTableData')->name('admin.get.sell.data');
+        Route::get('get/sell/book/edit/data/{id}', 'sellEdit')->name('admin.get.sell.edit');
+        Route::put('sell/book/update/data/{id} ', 'sellUpdate')->name('admin.sell.update');
+        Route::delete('sell/book/delete/{id}', 'sellDestroy')->name('admin.sell.delete');
+        Route::any('asd/sell/invoice/{id}', 'sellInvoice')->name('admin.sell.invoice');
+
+
+
 
 
     });
@@ -115,7 +135,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::prefix('distributor')->middleware('auth', 'distributor')->controller(distributorController::class)->group(function () {
 
         Route::get('dashboard', function () {
-            return view('adminPanel/dashboard');
+            return view('distributorPanel/dashboard');
         })->name('distributor.dashboard');
 
     });
@@ -126,11 +146,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 
 
-
-
 Route::get('/', function () {
-    return view('userPanel/dashboard');
+    return redirect('login');
 });
+
+// Route::get('/', function () {
+//     return view('userPanel/dashboard');
+// });
 
 Route::post('user/msg/store', 'App\Http\Controllers\userPanel\homeController@store')->name('user.msg');
 

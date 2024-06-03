@@ -22,7 +22,7 @@
 
 </head>
 
-<body>
+<body class="theme-white dark-sidebar sidebar-show">
     <div class="loader"></div>
     <div id="app">
         <div class="main-wrapper main-wrapper-1">
@@ -112,7 +112,7 @@
                     <ul class="sidebar-menu">
                         {{-- <li class="menu-header"></li> --}}
                         <br>
-                        <li class="dropdown @if ($url == 'admin/dashboard') active @endif ">
+                        <li class="dropdown @if ($url == 'distributor/dashboard') active @endif ">
                             <a href="{{ route('admin.dashboard') }}" class="nav-link"><i
                                     data-feather="monitor"></i><span>Dashboard</span></a>
                         </li>
@@ -120,32 +120,40 @@
                         <li class="dropdown @if ($url == 'admin/store/book') active @endif ">
                             <a href="{{ route('admin.store.book') }}" class="nav-link">
                                 <i data-feather="shopping-bag"></i>
-                                <span>Book Storage</span></a>
+                                <span>Sell Books</span></a>
                         </li>
 
                         <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
                             <a href="{{ route('admin.printing.press') }}" class="nav-link"><i
-                                    data-feather="mail"></i><span>Printing press</span></a>
+                                    data-feather="mail"></i><span>Stock Alert</span></a>
+                        </li>
+
+                        <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
+                            <a href="{{ route('admin.printing.press') }}" class="nav-link"><i
+                                    data-feather="mail"></i><span>Product Return</span></a>
+                        </li>
+                        <li class="menu-header">Money management</li>
+
+                        <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
+                            <a href="{{ route('admin.printing.press') }}" class="nav-link"><i
+                                    data-feather="mail"></i><span>Product Return</span></a>
+                        </li>
+
+                        <li class="dropdown @if ($url == 'admin/store/book'||$url == 'admin/create/subject' || $url == 'admin/create/class') active @endif">
+                            <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                                data-feather="shopping-bag"></i><span>Account Management</span></a>
+                            <ul class="dropdown-menu">
+
+                              <li class="@if ($url == 'admin/store/book') active @endif"><a class="nav-link" href="{{ route('admin.store.book') }}">Add Staff </a></li>
+                              <li class="@if ($url == 'admin/create/subject') active @endif"><a class="nav-link" href="{{ route('admin.create.subject') }}">Create subject</a></li>
+                              <li class="@if ($url == 'admin/create/class') active @endif"><a class="nav-link" href="{{ route('admin.create.class') }}">Create class</a></li>
+                              <li class="@if ($url == 'admin/storage/alert') active @endif"><a class="nav-link" href="{{route('admin.storage.alert')}}">Storage alert</a></li>
+                            </ul>
                         </li>
 
 
-                        <li class="dropdown @if ($url == 'admin/create/subject') active @endif ">
-                            <a href="{{ route('admin.create.subject') }}" class="nav-link">
-                                <i data-feather="book"></i>
-                                <span>Create Subject</span></a>
-                        </li>
 
-                        <li class="dropdown @if ($url == 'admin/create/class') active @endif ">
-                            <a href="{{ route('admin.create.class') }}" class="nav-link">
-                                <i data-feather="plus"></i>
-                                <span>Create Class</span></a>
-                        </li>
 
-                        <li class="dropdown @if ($url == 'admin/create/user') active @endif ">
-                            <a href="{{ route('admin.create.user') }}" class="nav-link">
-                                <i data-feather="user"></i>
-                                <span>Create User</span></a>
-                        </li>
 
 
 

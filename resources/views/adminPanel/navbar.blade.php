@@ -130,51 +130,37 @@
                         </li>
 
 
+                        <li class="dropdown">
+                            <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                                data-feather="dollar-sign"></i><span>Account management</span></a>
+                            <ul class="dropdown-menu">
+                              <li><a class="nav-link" href="{{route('admin.account.create')}}">Account</a></li>
+                              <li><a class="nav-link" href="{{route('admin.account.deposit')}}">Deposit</a></li>
+                              <li><a class="nav-link" href="{{route('admin.account.expense')}}">Expense</a></li>
+                              <li><a class="nav-link" href="{{route('admin.account.expense.category')}}">Expense Category</a></li>
+                            </ul>
+                        </li>
+
+
 
                         <li class="dropdown @if ($url == 'admin/create/selller' ||  $url == 'admin/books/transfer/to/selller') active @endif">
                             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                                 data-feather="briefcase"></i><span>Seller management</span></a>
                             <ul class="dropdown-menu">
                                 <li class="@if ($url == 'admin/create/selller') active @endif"><a class="nav-link" href="{{route('admin.create.seller')}}">Add seller</a></li>
-                                <li class="@if ($url == 'admin/books/transfer/to/selller') active @endif"><a class="nav-link" href="{{route('admin.transfer.to.seller')}}"> Transfer books to seller</a></li>
+                                <li class="@if ($url == 'admin/sell/book') active @endif"><a class="nav-link" href="{{route('admin.sell.book')}}"> Sell Book</a></li>
                               <li><a class="nav-link" href="widget-data.html">Refund request</a></li>
                             </ul>
                         </li>
-
-
-
-
-
-{{--
-                        <li class="dropdown ">
-                            <a href="{{ route('admin.printing.press') }}" class="nav-link"><i
-                                    data-feather="mail"></i><span>Printing press</span></a>
-                        </li> --}}
 
                         <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
                             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                                 data-feather="printer"></i><span>Printing Press</span></a>
                             <ul class="dropdown-menu">
                               <li class="@if ($url == 'admin/printing/press') active @endif"><a class="nav-link" href="{{ route('admin.printing.press') }}">Add printing press</a></li>
-                              <li><a class="nav-link" href="widget-data.html">Unpaid</a></li>
+                              <li><a class="nav-link" href="{{route('admin.printing.press.unpaid')}}">Unpaid</a></li>
                             </ul>
                         </li>
-
-                        <li class="dropdown">
-                            <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                                data-feather="dollar-sign"></i><span>Account management</span></a>
-                            <ul class="dropdown-menu">
-                              <li><a class="nav-link" href="widget-chart.html">Account</a></li>
-                              <li><a class="nav-link" href="widget-data.html">Deposit</a></li>
-                              <li><a class="nav-link" href="widget-data.html">Expense</a></li>
-                            </ul>
-                        </li>
-
-
-
-
-
-
 
                         <li class="dropdown @if ($url == 'admin/create/user') active @endif ">
                             <a href="{{ route('admin.create.user') }}" class="nav-link">
