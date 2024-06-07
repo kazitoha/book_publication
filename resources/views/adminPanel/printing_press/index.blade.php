@@ -170,6 +170,7 @@
                             <td>${printingPress.name}</td>
                             <td>${printingPress.address}</td>
                             <td>
+
                               <button class="btn btn-outline-primary" onclick="editPrintingPress(${printingPress.id})" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                               <button class="btn btn-outline-danger" onclick="deletePrintingPress(${printingPress.id})"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                             </td>

@@ -51,6 +51,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 
 
+
         //unpaid to printig press
         Route::get('printing/press/unpaid', 'printingPressIndex')->name('admin.printing.press.unpaid');
 
@@ -66,6 +67,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('get/book/storage/edit/data/{id}', 'bookStorageEdit')->name('admin.get.book.storage.edit');
         Route::put('store/book/update/data/{id} ', 'bookStorageUpdate')->name('admin.get.book.storage.update');
         Route::delete('store/book/delete/{id}', 'bookStorageDestroy')->name('admin.printing.press.delete');
+        Route::any('book/storage/invoice/{id}', 'bookStoreageInvoice')->name('admin.book.strorage.invoice');
 
         //storage alert
         Route::get('storage/alert', 'storageAlert')->name('admin.storage.alert');
@@ -123,7 +125,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('get/sell/book/edit/data/{id}', 'sellEdit')->name('admin.get.sell.edit');
         Route::put('sell/book/update/data/{id} ', 'sellUpdate')->name('admin.sell.update');
         Route::delete('sell/book/delete/{id}', 'sellDestroy')->name('admin.sell.delete');
-        Route::any('asd/sell/invoice/{id}', 'sellInvoice')->name('admin.sell.invoice');
+        Route::any('sell/invoice/{id}', 'sellInvoice')->name('admin.sell.invoice');
 
 
 

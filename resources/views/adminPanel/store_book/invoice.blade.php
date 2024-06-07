@@ -116,8 +116,8 @@
                     1234 Elm Street, Suite 567<br>
                     City, State, ZIP</td>
                 <td style="text-align: right">
-                    {{ $seller_name }}<br>
-                    {{ $seller_address }}
+                    {{ $printing_press_name }}<br>
+                    {{ $address }}
                 </td>
             </tr>
         </table>
@@ -125,22 +125,22 @@
         <table cellpadding="0" cellspacing="0" style=" border: 1px solid rgb(212, 211, 211);">
             <tr class="heading item">
                 <td style="text-align: center;">No.</td>
-                <td style="text-align: center;">Class Name</td>
-                <td style="text-align: center;">Subject Name</td>
-                <td style="text-align: center;">Unit Price</td>
-                <td style="text-align: center;">Total Unit</td>
+                <td style="text-align: center;">Press </td>
+                <td style="text-align: center;">Class </td>
+                <td style="text-align: center;">Subject</td>
+                <td style="text-align: center;">unit Price</td>
+                <td style="text-align: center;">Total unit</td>
                 <td style="text-align: center;">Total</td>
             </tr>
-            @foreach ($classes as $index => $class_id)
             <tr class="details" bordar>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $index + 1 }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $classNames[$class_id] }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $subjectNames[$subjects[$index]] }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $unit_price[$index] }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $total_unit[$index] }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $unit_price[$index] * $total_unit[$index] }}</td>
+                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">1</td>
+                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$printing_press_name}}</td>
+                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$class_name}}</td>
+                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$subject_name}}</td>
+                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$unit_price}}</td>
+                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$total_unit}}</td>
+                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$unit_price * $total_unit}}</td>
             </tr>
-            @endforeach
         </table>
         <br>
 
@@ -152,7 +152,7 @@
             <tr class="item last">
                 <td style="text-align: center;">Subtotal</td>
                 <td style="text-align: center">
-                    {{ array_sum(array_map(function($u, $t) { return $u * $t; }, $unit_price, $total_unit)) }} Tk.
+                    {{  $unit_price * $total_unit }} Tk.
                 </td>
             </tr>
             <tr class="item last" style="text-align: center;">
@@ -161,7 +161,7 @@
             </tr>
             <tr class="total">
                 <td></td>
-                <td >Total: <b style="text-align: center;">{{ array_sum(array_map(function($u, $t) { return $u * $t; }, $unit_price, $total_unit)) + 17 }} Tk</b></td>
+                <td >Total: <b style="text-align: center;">{{  $unit_price * $total_unit + 17 }} Tk</b></td>
             </tr>
         </table>
     </div>

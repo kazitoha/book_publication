@@ -110,52 +110,79 @@
                         $url = Route::current()->uri;
                     @endphp
                     <ul class="sidebar-menu">
-                        {{-- <li class="menu-header"></li> --}}
-                        <br>
+                      <br>
                         <li class="dropdown @if ($url == 'admin/dashboard') active @endif ">
                             <a href="{{ route('admin.dashboard') }}" class="nav-link"><i
-                                    data-feather="monitor"></i><span>Dashboard</span></a>
+                                class="fas fa-desktop"></i><span>Dashboard</span></a>
+                            </li>
+
+                        <li class="menu-header">Sell Management</li>
+
+                        <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
+                            <a class="nav-link" href="{{route('admin.sell.book')}}"><i
+                                class="fas fa-shopping-basket"></i><span>Sell Book</span> </a>
                         </li>
 
-                        <li class="dropdown @if ($url == 'admin/store/book'||$url == 'admin/create/subject' || $url == 'admin/create/class') active @endif">
-                            <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                                data-feather="shopping-bag"></i><span>Storage management</span></a>
-                            <ul class="dropdown-menu">
+                        {{-- <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
+                            <a class="nav-link" href="{{route('admin.sell.book')}}"><i
+                                class="fas fa-shopping-basket"></i><span>Sell List</span> </a>
+                        </li> --}}
 
-                              <li class="@if ($url == 'admin/store/book') active @endif"><a class="nav-link" href="{{ route('admin.store.book') }}">Store book </a></li>
-                              <li class="@if ($url == 'admin/create/subject') active @endif"><a class="nav-link" href="{{ route('admin.create.subject') }}">Create subject</a></li>
-                              <li class="@if ($url == 'admin/create/class') active @endif"><a class="nav-link" href="{{ route('admin.create.class') }}">Create class</a></li>
-                              <li class="@if ($url == 'admin/storage/alert') active @endif"><a class="nav-link" href="{{route('admin.storage.alert')}}">Storage alert</a></li>
-                            </ul>
+                        <li class="dropdown @if ($url == 'admin/create/selller') active @endif ">
+                            <a href="{{route('admin.create.seller')}}" class="nav-link"><i
+                                    class="fas fa-user-check"></i><span>Add seller</span></a>
                         </li>
 
 
-                        <li class="dropdown">
+                        <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
+                            <a class="nav-link" href="{{route('admin.sell.book')}}"><i
+                                    class="fas fa-dolly"></i><span>Refund request</span> </a>
+                        </li>
+
+                        <li class="menu-header">Storage Management</li>
+
+
+                        <li class="dropdown @if ($url == 'admin/store/book') active @endif">
+                            <a class="nav-link" href="{{ route('admin.store.book') }}"><i
+                                    class="fas fa-store-alt"></i><span>Store book</span> </a>
+                        </li>
+                        <li class="dropdown @if ($url == 'admin/create/subject') active @endif">
+                            <a class="nav-link" href="{{ route('admin.create.subject') }}"><i
+                                    class="fas fa-align-center"></i><span>Create subject</span> </a>
+                        </li>
+                        <li class="dropdown @if ($url == 'admin/create/class') active @endif">
+                            <a class="nav-link" href="{{ route('admin.create.class') }}"><i
+                                    class="fas fa-address-card"></i><span>Create class</span> </a>
+                        </li>
+                        <li class="dropdown @if ($url == 'admin/storage/alert') active @endif">
+                            <a class="nav-link" href="{{route('admin.storage.alert')}}"><i
+                                    class="fas fa-info"></i><span>Storage alert</span> </a>
+                        </li>
+
+
+                    <li class="menu-header">Other Menu</li>
+
+
+
+                        {{-- <li class="dropdown">
                             <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                                data-feather="dollar-sign"></i><span>Account management</span></a>
+                                class="far fa-money-bill-alt"></i><span>Account management</span></a>
                             <ul class="dropdown-menu">
                               <li><a class="nav-link" href="{{route('admin.account.create')}}">Account</a></li>
                               <li><a class="nav-link" href="{{route('admin.account.deposit')}}">Deposit</a></li>
                               <li><a class="nav-link" href="{{route('admin.account.expense')}}">Expense</a></li>
                               <li><a class="nav-link" href="{{route('admin.account.expense.category')}}">Expense Category</a></li>
                             </ul>
-                        </li>
+                        </li> --}}
 
 
 
-                        <li class="dropdown @if ($url == 'admin/create/selller' ||  $url == 'admin/books/transfer/to/selller') active @endif">
-                            <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                                data-feather="briefcase"></i><span>Seller management</span></a>
-                            <ul class="dropdown-menu">
-                                <li class="@if ($url == 'admin/create/selller') active @endif"><a class="nav-link" href="{{route('admin.create.seller')}}">Add seller</a></li>
-                                <li class="@if ($url == 'admin/sell/book') active @endif"><a class="nav-link" href="{{route('admin.sell.book')}}"> Sell Book</a></li>
-                              <li><a class="nav-link" href="widget-data.html">Refund request</a></li>
-                            </ul>
-                        </li>
+
 
                         <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
                             <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                                data-feather="printer"></i><span>Printing Press</span></a>
+                                class="
+                                fas fa-print"></i><span>Printing Press</span></a>
                             <ul class="dropdown-menu">
                               <li class="@if ($url == 'admin/printing/press') active @endif"><a class="nav-link" href="{{ route('admin.printing.press') }}">Add printing press</a></li>
                               <li><a class="nav-link" href="{{route('admin.printing.press.unpaid')}}">Unpaid</a></li>
@@ -164,7 +191,7 @@
 
                         <li class="dropdown @if ($url == 'admin/create/user') active @endif ">
                             <a href="{{ route('admin.create.user') }}" class="nav-link">
-                                <i data-feather="user"></i>
+                                <i class="fas fa-user-plus"></i>
                                 <span>User Management</span></a>
                         </li>
 

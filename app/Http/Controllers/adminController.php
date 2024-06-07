@@ -18,9 +18,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class adminController extends Controller
 {
-
-
-
     function printingPressIndex()
     {
         return view('adminPanel.printing_press.index');
@@ -71,6 +68,9 @@ class adminController extends Controller
 
         return response()->json(['success' => 'Printing press deleted successfully.']);
     }
+
+
+
 
 
 
@@ -182,18 +182,49 @@ class adminController extends Controller
         return response()->json(['message' => 'Book Deleted successfully']);
     }
 
+    public function bookStoreageInvoice($id)
+    {
+
+        $book_storage = StoreBook::with('printingPress', 'subject', 'classes')->find($id);
+
+        if (!$book_storage) {
+            return back()->with('error', 'something went worng');
+        }
+
+        $data = [
+            'id' => $book_storage->id,
+            'printing_press_name' => $book_storage->printingPress->name,
+            'address' => $book_storage->printingPress->address,
+            'class_name' => $book_storage->classes->name,
+            'subject_name' => $book_storage->subject->name,
+            'unit_price' => $book_storage->unit_price,
+            'total_unit' => $book_storage->total_unit,
+            'created' => $book_storage->created_at->format(' F j, Y'),
+        ];
+
+        // Debug: Log data to ensure it's correct
+
+        $pdf = PDF::setPaper('a4', 'portrait')->loadView('adminPanel.store_book.invoice', $data);
+
+        $pdf_name = $book_storage->printingPress->name . '-' . $book_storage->created_at->format(' F j, Y') . ".pdf";
+        return $pdf->download($pdf_name);
+
+
+    }
+
 
 
 
     //storage alert
 
-    public function storageAlert(){
+    public function storageAlert()
+    {
         return view('adminPanel.storage_alert.storage_alert');
     }
 
     function storageTableData()
     {
-        $lowStockAlert=Subjects::with('classes')->where('total_unit', '<', 10)->get();
+        $lowStockAlert = Subjects::with('classes')->where('total_unit', '<', 10)->get();
 
         $html = view('adminPanel.storage_alert.alert_list', compact('lowStockAlert'))->render();
         return response()->json(['html' => $html]);
@@ -533,7 +564,7 @@ class adminController extends Controller
 
     public function bookUnitPrice(Request $request, $sellerId)
     {
-        $unitPrice=StoreBook::where('subject_id', $sellerId)->select('unit_price')->latest()->first();
+        $unitPrice = StoreBook::where('subject_id', $sellerId)->select('unit_price')->latest()->first();
         return $unitPrice;
     }
 
@@ -553,7 +584,6 @@ class adminController extends Controller
 
     public function sellTableData()
     {
-
         $booksInSeller = Sell::with('class')->with('subject')->with('seller')->orderBy('id', 'desc')->get();
 
         $html = view('adminPanel.transfer_to_seller.books_transfer_list', compact('booksInSeller'))->render();
@@ -562,96 +592,111 @@ class adminController extends Controller
 
     function sellStore(Request $request)
     {
+        // Validate the request data
         $request->validate([
             'sellerID' => 'required',
-            'classID' => 'required',
-            'subjectID' => 'required',
-            'purchase_price'=>'required',
-            'unit_price' => 'required',
-            'total_unit' => 'required',
-            'paid_amount' => 'required',
-            'unpaid_amount' => 'required',
+            'classID.*' => 'required',
+            'subjectID.*' => 'required',
+            'purchase_price.*' => 'required|numeric|min:0',
+            'unit_price.*' => 'required|numeric|min:0',
+            'total_unit.*' => 'required|integer|min:1',
+            'paid_amount' => 'required|numeric|min:0',
+            'unpaid_amount' => 'required|numeric',
         ]);
 
-        $subject_detail = Subjects::find($request->input('subjectID'));
+        // Retrieve subject details
+        $subject_details = Subjects::whereIn('id', $request->input('subjectID'))->get();
 
-        if ($subject_detail->total_unit >= $request->input('total_unit')) {
+        // Prepare arrays for calculations
+        $classIDs = $request->input('classID');
+        $subjectIDs = $request->input('subjectID');
+        $purchasePrices = $request->input('purchase_price');
+        $unitPrices = $request->input('unit_price');
+        $totalUnits = $request->input('total_unit');
 
-            $profit_per_unit=$request->input('unit_price') - $request->input('purchase_price');
-            $total_profit= $profit_per_unit * $request->input('total_unit');
+        $total_profit = 0;
 
-            $bookInseller = new Sell();
-            $bookInseller->seller_id = $request->input('sellerID');
-            $bookInseller->class_id = $request->input('classID');
-            $bookInseller->subject_id = $request->input('subjectID');
-            $bookInseller->purchase_price = $request->input('purchase_price');
-            $bookInseller->unit_price = $request->input('unit_price');
-            $bookInseller->total_unit = $request->input('total_unit');
-            $bookInseller->paid_amount = $request->input('paid_amount');
-            $bookInseller->unpaid_amount = $request->input('unpaid_amount');
-            $bookInseller->profit = $total_profit;
-            $bookInseller->save();
+        // Check available units and calculate profit
+        foreach ($subject_details as $subject_detail) {
+            $subjectIndex = array_search($subject_detail->id, $subjectIDs);
+            if ($subject_detail->total_unit < $totalUnits[$subjectIndex]) {
+                return response()->json(['error' => 'This amount of quantity of books is not available for subject ID: ' . $subject_detail->id], 400);
+            }
 
-            $total_books_in_this_subject = $subject_detail->total_unit - $request->input('total_unit');
-            $subject_detail->update([
-                'total_unit' => $total_books_in_this_subject,
-            ]);
+            $profit_per_unit = $unitPrices[$subjectIndex] - $purchasePrices[$subjectIndex];
+            $total_profit += $profit_per_unit * $totalUnits[$subjectIndex];
 
-
-
-
-            return response()->json(['message' => 'Book Store successfully'], 200);
-
-        } else {
-            return response()->json(['message' => 'This amount of quantity of books is not available'], 400);
-
+            // Update the subject's total unit
+            $subject_detail->total_unit -= $totalUnits[$subjectIndex];
+            $subject_detail->save();
         }
 
 
 
 
+        // Save the sale
+        $bookInseller = new Sell();
+        $bookInseller->seller_id = $request->input('sellerID');
+        $bookInseller->class_id = json_encode($classIDs);
+        $bookInseller->subject_id = json_encode($subjectIDs);
+        $bookInseller->purchase_price = json_encode($purchasePrices);
+        $bookInseller->unit_price = json_encode($unitPrices);
+        $bookInseller->total_unit = json_encode($totalUnits);
+        $bookInseller->paid_amount = $request->input('paid_amount');
+        $bookInseller->unpaid_amount = $request->input('unpaid_amount');
+        $bookInseller->profit = $total_profit;
+        $bookInseller->save();
 
 
 
 
 
-
-
-
+        return redirect()->back()->with('success', 'Book Store successfully');
     }
 
 
-    function sellInvoice($id)
-{
-    $sell_info = Sell::with('class', 'subject', 'seller')->find($id);
 
-    if (!$sell_info) {
-        return response()->json(['message' => 'Sell record not found'], 404);
-    }
 
-    $data = [
-        'id' => $sell_info->id,
-        'seller_name' => $sell_info->seller->name,
-        'seller_address' => $sell_info->seller->address,
-        'class_name' => $sell_info->class->name,
-        'subject_name' => $sell_info->subject->name,
-        'unit_price' => $sell_info->unit_price,
-        'total_unit' => $sell_info->total_unit,
-        'paid_amount' => $sell_info->paid_amount,
-        'unpaid_amount' => $sell_info->unpaid_amount,
-        'created'=>$sell_info->created_at->format(' F j, Y'),
-    ];
 
-    // Debug: Log data to ensure it's correct
+    public function sellInvoice($id)
+    {
+        $sell_info = Sell::with('seller')->find($id);
+
+        if (!$sell_info) {
+            return response()->json(['message' => 'Sell record not found'], 404);
+        }
+
+        $classIDs = json_decode($sell_info->class_id, true);
+        $subjectIDs = json_decode($sell_info->subject_id, true);
+        $unitPrices = json_decode($sell_info->unit_price, true);
+        $totalUnits = json_decode($sell_info->total_unit, true);
+
+        $classNames = Classes::whereIn('id', $classIDs)->pluck('name', 'id')->toArray();
+        $subjectNames = Subjects::whereIn('id', $subjectIDs)->pluck('name', 'id')->toArray();
+
+        $data = [
+            'id' => $sell_info->id,
+            'seller_name' => $sell_info->seller->name,
+            'seller_address' => $sell_info->seller->address,
+            'classes' => $classIDs,
+            'subjects' => $subjectIDs,
+            'classNames' => $classNames,
+            'subjectNames' => $subjectNames,
+            'unit_price' => $unitPrices,
+            'total_unit' => $totalUnits,
+            'paid_amount' => $sell_info->paid_amount,
+            'unpaid_amount' => $sell_info->unpaid_amount,
+            'created' => $sell_info->created_at->format('F j, Y'),
+        ];
 
         $pdf = PDF::setPaper('a4', 'portrait')->loadView('adminPanel.transfer_to_seller.sell_invoice', $data);
 
-         $pdf_name = $sell_info->seller->name .".pdf";
-         return $pdf->download($pdf_name);
+        $pdf_name = $sell_info->seller->name . ".pdf";
+        return $pdf->download($pdf_name);
+    }
 
 
-    //  return view('adminPanel.transfer_to_seller.sell_invoice',compact('data'));
-}
+
 
 
 
