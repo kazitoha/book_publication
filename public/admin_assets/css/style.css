@@ -5590,7 +5590,8 @@ body.layout-3 .main-footer {
     color: #000;
 }
 .main-sidebar .sidebar-brand a .header-logo {
-    height: 30px;
+    height: 154px;
+    width: 249px;
 }
 .main-sidebar .sidebar-brand a .logo-name {
     vertical-align: middle;

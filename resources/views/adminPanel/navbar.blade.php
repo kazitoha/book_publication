@@ -103,7 +103,7 @@
                 <aside id="sidebar-wrapper">
                     <div class="sidebar-brand">
                         <a href="{{url('admin/dashboard')}}"> <img alt="image" src="{{ asset('admin_assets/img/logo.png') }}"
-                                class="header-logo" /> <span class="logo-name">Otika</span>
+                                class="header-logo" />
                         </a>
                     </div>
                     @php
@@ -113,14 +113,14 @@
                       <br>
                         <li class="dropdown @if ($url == 'admin/dashboard') active @endif ">
                             <a href="{{ route('admin.dashboard') }}" class="nav-link"><i
-                                class="fas fa-desktop"></i><span>Dashboard</span></a>
+                                class="fas fa-desktop"></i><span>ড্যাশবোর্ড</span></a>
                             </li>
 
-                        <li class="menu-header">Sell Management</li>
+                        <li class="menu-header">ব্যবস্থাপনা বিক্রয়</li>
 
                         <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
                             <a class="nav-link" href="{{route('admin.sell.book')}}"><i
-                                class="fas fa-shopping-basket"></i><span>Sell Book</span> </a>
+                                class="fas fa-shopping-basket"></i><span>বই বিক্রি</span> </a>
                         </li>
 
                         {{-- <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
@@ -130,37 +130,37 @@
 
                         <li class="dropdown @if ($url == 'admin/create/selller') active @endif ">
                             <a href="{{route('admin.create.seller')}}" class="nav-link"><i
-                                    class="fas fa-user-check"></i><span>Add seller</span></a>
+                                    class="fas fa-user-check"></i><span>বিক্রেতা যোগ করুন</span></a>
                         </li>
 
 
                         <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
                             <a class="nav-link" href="{{route('admin.sell.book')}}"><i
-                                    class="fas fa-dolly"></i><span>Refund request</span> </a>
+                                    class="fas fa-dolly"></i><span>ফেরত অনুরোধ</span> </a>
                         </li>
 
-                        <li class="menu-header">Storage Management</li>
+                        <li class="menu-header">স্টোরেজ ম্যানেজমেন্ট</li>
 
 
                         <li class="dropdown @if ($url == 'admin/store/book') active @endif">
                             <a class="nav-link" href="{{ route('admin.store.book') }}"><i
-                                    class="fas fa-store-alt"></i><span>Store book</span> </a>
+                                    class="fas fa-store-alt"></i><span>স্টোর বই</span> </a>
                         </li>
                         <li class="dropdown @if ($url == 'admin/create/subject') active @endif">
                             <a class="nav-link" href="{{ route('admin.create.subject') }}"><i
-                                    class="fas fa-align-center"></i><span>Create subject</span> </a>
+                                    class="fas fa-align-center"></i><span>বিষয় তৈরি করুন</span> </a>
                         </li>
                         <li class="dropdown @if ($url == 'admin/create/class') active @endif">
                             <a class="nav-link" href="{{ route('admin.create.class') }}"><i
-                                    class="fas fa-address-card"></i><span>Create class</span> </a>
+                                    class="fas fa-address-card"></i><span>ক্লাস তৈরি করুন</span> </a>
                         </li>
                         <li class="dropdown @if ($url == 'admin/storage/alert') active @endif">
                             <a class="nav-link" href="{{route('admin.storage.alert')}}"><i
-                                    class="fas fa-info"></i><span>Storage alert</span> </a>
+                                    class="fas fa-info"></i><span>স্টোরেজ সতর্কতা</span> </a>
                         </li>
 
 
-                    <li class="menu-header">Other Menu</li>
+                    <li class="menu-header">অন্যান্য মেনু</li>
 
 
 
@@ -182,24 +182,21 @@
                         <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
                             <a href="#" class="menu-toggle nav-link has-dropdown"><i
                                 class="
-                                fas fa-print"></i><span>Printing Press</span></a>
+                                fas fa-print"></i><span>প্রিন্টিং প্রেস</span></a>
                             <ul class="dropdown-menu">
                               <li class="@if ($url == 'admin/printing/press') active @endif"><a class="nav-link" href="{{ route('admin.printing.press') }}">Add printing press</a></li>
-                              <li><a class="nav-link" href="{{route('admin.printing.press.unpaid')}}">Unpaid</a></li>
+                              <li><a class="nav-link" href="{{route('admin.printing.press.unpaid')}}">অপরিশোধিত</a></li>
                             </ul>
                         </li>
 
                         <li class="dropdown @if ($url == 'admin/create/user') active @endif ">
                             <a href="{{ route('admin.create.user') }}" class="nav-link">
                                 <i class="fas fa-user-plus"></i>
-                                <span>User Management</span></a>
+                                <span>ব্যবহারকারী ব্যবস্থাপনা</span></a>
                         </li>
 
                         <br>
                         <br>
-
-
-
 
                     </ul>
                 </aside>
@@ -214,7 +211,7 @@
             </div>
             <footer class="main-footer">
                 <div class="footer-left">
-                    <a href="templateshub.net">Templateshub</a></a>
+                    <a href="nexiobd.com">NexioBD</a></a>
                 </div>
                 <div class="footer-right">
                 </div>
