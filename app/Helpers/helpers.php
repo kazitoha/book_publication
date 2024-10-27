@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Subjects;
-
 if (!function_exists('format_date')) {
     /**
      * Format a date to a human-readable form.
@@ -13,12 +11,21 @@ if (!function_exists('format_date')) {
     {
         return \Carbon\Carbon::parse($date)->format('F d, Y');
     }
+}
 
-    function convertToBangla($number)
+if (!function_exists('convertEnglishToBangla')) {
+    /**
+     * Convert English numeric numbers to Bangla numerals.
+     *
+     * @param string|int $number
+     * @return string
+     */
+    function convertEnglishToBangla($number)
     {
-        $fmt = new \NumberFormatter('bn_BD', \NumberFormatter::DECIMAL);
-        $banglaCount = $fmt->format($number);
-        return $banglaCount;
+        // Mapping of English digits to Bangla digits
+        $banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
 
+        // Replace each English digit with the corresponding Bangla numeral
+        return str_replace(range(0, 9), $banglaDigits, (string) $number);
     }
 }

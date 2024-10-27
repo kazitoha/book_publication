@@ -6,10 +6,10 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Total Subject List</h4>
+                        <h4>Total Subject List(মোট বিষয় তালিকা)</h4>
                         <div class="card-body" style="text-align: right;">
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#exampleModal">Add Subject</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add
+                                Subject(বিষয় যোগ করুন)</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -18,9 +18,9 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Class Name</th>
-                                        <th>Subject Name</th>
-                                        <th>Action</th>
+                                        <th>Class Name(ক্লাসের নাম)</th>
+                                        <th>Subject Name(বিষয়ের নাম)</th>
+                                        <th>Action(অ্যাকশন)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="TableBody"></tbody>
@@ -38,7 +38,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Add Subject</h5>
+                    <h5 class="modal-title" id="formModal">Add Subject (বিষয় যোগ করুন)</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -47,10 +47,10 @@
                     <form id="storeForm">
 
                         <div class="form-group">
-                            <label>Class</label>
+                            <label>Class (ক্লাস)</label>
                             <div class="input-group">
                                 <select class="form-control" name="class_id" id="editRoleId">
-                                    <option selected disabled>Select a class</option>
+                                    <option selected disabled>Select a class (একটি ক্লাস নির্বাচন করুন)</option>
                                     @foreach ($classes as $class)
                                         <option value="{{ $class->id }}">{{ $class->name }}</option>
                                     @endforeach
@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Subject Name (বিষয়ের নাম)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter subject name" name="name"
                                     required>
@@ -78,7 +78,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editFormModal">Edit Subject</h5>
+                    <h5 class="modal-title" id="editFormModal">Edit Subject (বিষয় সম্পাদনা করুন)</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -89,7 +89,7 @@
 
                         <div class="input-group">
                             <select class="form-control" name="class_id" id="editClassId">
-                                <option selected disabled>Select a class</option>
+                                <option selected disabled>Select a class (একটি ক্লাস নির্বাচন করুন)</option>
                                 @foreach ($classes as $class)
                                     <option value="{{ $class->id }}">{{ $class->name }}</option>
                                 @endforeach
@@ -97,7 +97,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Subject Name (বিষয়ের নাম)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter subject name" name="name"
                                     id="editName" required>
@@ -188,7 +188,7 @@
             });
         }
 
-        function updateSubmit(){
+        function updateSubmit() {
 
             const form = $('#editForm');
             const id = $('#editId').val();
@@ -247,7 +247,5 @@
                 });
             }
         }
-
-
     </script>
 @endsection

@@ -6,10 +6,10 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Printing Press List</h4>
+                        <h4>Printing Press List (প্রিন্টিং প্রেসের তালিকা)</h4>
                         <div class="card-body" style="text-align: right;">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add
-                                Printing Press</button>
+                                Printing Press (প্রিন্টিং প্রেস যোগ করুন)</button>
                         </div>
                     </div>
 
@@ -19,9 +19,9 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
-                                        <th>Address</th>
-                                        <th>Action</th>
+                                        <th>Name (নাম)</th>
+                                        <th>Address (ঠিকানা)</th>
+                                        <th>Action (অ্যাকশন)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="printingPressTableBody"></tbody>
@@ -39,7 +39,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Add Printing Press</h5>
+                    <h5 class="modal-title" id="formModal">Add Printing Press (প্রিন্টিং প্রেস যোগ করুন)</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -48,14 +48,14 @@
                 <div class="modal-body">
                     <form id="printingPressForm">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Name (নাম)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Printing press name" name="name"
                                     required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Address</label>
+                            <label>Address (ঠিকানা)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Printing press address"
                                     name="address" required>

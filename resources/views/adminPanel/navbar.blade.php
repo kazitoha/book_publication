@@ -102,25 +102,25 @@
             <div class="main-sidebar sidebar-style-2">
                 <aside id="sidebar-wrapper">
                     <div class="sidebar-brand">
-                        <a href="{{url('admin/dashboard')}}"> <img alt="image" src="{{ asset('admin_assets/img/logo.png') }}"
-                                class="header-logo" />
+                        <a href="{{ url('admin/dashboard') }}"> <img alt="image"
+                                src="{{ asset('admin_assets/img/logo.png') }}" class="header-logo" />
                         </a>
                     </div>
                     @php
                         $url = Route::current()->uri;
                     @endphp
                     <ul class="sidebar-menu">
-                      <br>
+                        <br>
                         <li class="dropdown @if ($url == 'admin/dashboard') active @endif ">
                             <a href="{{ route('admin.dashboard') }}" class="nav-link"><i
-                                class="fas fa-desktop"></i><span>ড্যাশবোর্ড</span></a>
-                            </li>
+                                    class="fas fa-desktop"></i><span>ড্যাশবোর্ড</span></a>
+                        </li>
 
                         <li class="menu-header">ব্যবস্থাপনা বিক্রয়</li>
 
                         <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
-                            <a class="nav-link" href="{{route('admin.sell.book')}}"><i
-                                class="fas fa-shopping-basket"></i><span>বই বিক্রি</span> </a>
+                            <a class="nav-link" href="{{ route('admin.sell.book') }}"><i
+                                    class="fas fa-shopping-basket"></i><span>বই বিক্রি</span> </a>
                         </li>
 
                         {{-- <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
@@ -129,13 +129,13 @@
                         </li> --}}
 
                         <li class="dropdown @if ($url == 'admin/create/selller') active @endif ">
-                            <a href="{{route('admin.create.seller')}}" class="nav-link"><i
+                            <a href="{{ route('admin.create.seller') }}" class="nav-link"><i
                                     class="fas fa-user-check"></i><span>বিক্রেতা যোগ করুন</span></a>
                         </li>
 
 
                         <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
-                            <a class="nav-link" href="{{route('admin.sell.book')}}"><i
+                            <a class="nav-link" href="{{ route('admin.sell.book') }}"><i
                                     class="fas fa-dolly"></i><span>ফেরত অনুরোধ</span> </a>
                         </li>
 
@@ -155,12 +155,12 @@
                                     class="fas fa-address-card"></i><span>ক্লাস তৈরি করুন</span> </a>
                         </li>
                         <li class="dropdown @if ($url == 'admin/storage/alert') active @endif">
-                            <a class="nav-link" href="{{route('admin.storage.alert')}}"><i
+                            <a class="nav-link" href="{{ route('admin.storage.alert') }}"><i
                                     class="fas fa-info"></i><span>স্টোরেজ সতর্কতা</span> </a>
                         </li>
 
 
-                    <li class="menu-header">অন্যান্য মেনু</li>
+                        <li class="menu-header">অন্যান্য মেনু</li>
 
 
 
@@ -181,11 +181,14 @@
 
                         <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
                             <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                                class="
-                                fas fa-print"></i><span>প্রিন্টিং প্রেস</span></a>
+                                    class="
+                                fas fa-print"></i><span>প্রিন্টিং
+                                    প্রেস</span></a>
                             <ul class="dropdown-menu">
-                              <li class="@if ($url == 'admin/printing/press') active @endif"><a class="nav-link" href="{{ route('admin.printing.press') }}">Add printing press</a></li>
-                              <li><a class="nav-link" href="{{route('admin.printing.press.unpaid')}}">অপরিশোধিত</a></li>
+                                <li class="@if ($url == 'admin/printing/press') active @endif"><a class="nav-link"
+                                        href="{{ route('admin.printing.press') }}">Add printing press</a></li>
+                                <li><a class="nav-link"
+                                        href="{{ route('admin.printing.press.unpaid') }}">অপরিশোধিত</a></li>
                             </ul>
                         </li>
 

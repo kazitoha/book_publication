@@ -26,7 +26,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/dashboard', function () {
         if (Auth::user()->role_id == 1) {
             return redirect()->route('admin.dashboard');
-        }elseif (Auth::user()->role_id == 2) {
+        } elseif (Auth::user()->role_id == 2) {
             return redirect()->route('distributor.dashboard');
         }
         return view('dashboard'); // Or any other user dashboard
@@ -126,11 +126,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::put('sell/book/update/data/{id} ', 'sellUpdate')->name('admin.sell.update');
         Route::delete('sell/book/delete/{id}', 'sellDestroy')->name('admin.sell.delete');
         Route::any('sell/invoice/{id}', 'sellInvoice')->name('admin.sell.invoice');
-
-
-
-
-
     });
 
 
@@ -139,9 +134,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('dashboard', function () {
             return view('distributorPanel/dashboard');
         })->name('distributor.dashboard');
-
     });
-
 });
 
 
@@ -157,4 +150,3 @@ Route::get('/', function () {
 // });
 
 Route::post('user/msg/store', 'App\Http\Controllers\userPanel\homeController@store')->name('user.msg');
-

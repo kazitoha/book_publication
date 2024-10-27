@@ -6,165 +6,271 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice</title>
     <style>
+        /* Base styling */
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             background: #f5f5f5;
-
         }
 
         .invoice-box {
             max-width: 800px;
             margin: auto;
             padding: 30px;
-            border: 1px solid #eee;
+            border: 2px solid #1b3a57;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-            background: #fff;
+            background: #ffffff;
         }
 
-        .invoice-box table {
-            width: 100%;
-            line-height: inherit;
-            text-align: left;
-        }
-
-        .invoice-box table td {
-            padding: 5px;
-            vertical-align: top;
-        }
-
-        .invoice-box .flex-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .invoice-box .flex-container .title {
-            font-size: 45px;
-            line-height: 45px;
-            color: #333;
-        }
-
-        .invoice-box table tr.information table td {
-            padding-bottom: 40px;
+        .title {
+            font-size: 50px;
+            color: #1b3a57;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .right-align {
             text-align: right;
         }
 
-        .invoice-box table tr.heading td {
-            background: #eee;
-            border-bottom: 1px solid #ddd;
+        .header {
+            color: #2a5d94;
             font-weight: bold;
         }
 
-        .invoice-box table tr.details td {
-            padding-bottom: 20px;
+        /* Single border table styling */
+        .bordered-table {
+            border: 1px solid #2a5d94;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .bordered-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .bordered-table td {
+            padding: 10px;
+        }
+
+        /* General table styling */
+        .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+            border-collapse: collapse;
+        }
+
+        .invoice-box table td {
+            padding: 8px;
+            vertical-align: top;
+            border: 1px solid #2a5d94;
+        }
+
+        .invoice-box table tr.heading td {
+            background: #2a5d94;
+            color: white;
+            font-weight: bold;
+            text-align: center;
         }
 
         .invoice-box table tr.item td {
-            border-bottom: 1px solid #eee;
+            text-align: center;
         }
 
-        .invoice-box table tr.item.last td {
-            border-bottom: none;
+        /* Totals table styling */
+        .totals-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
         }
 
-        .invoice-box table tr.total td:nth-child(2) {
-            border-top: 2px solid #eee;
+        /* New style for the Print Invoice button */
+        #print-invoice {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            /* Change to your desired color */
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Hover effect for the Print Invoice button */
+        #print-invoice:hover {
+            background-color: #388E3C;
+            /* Darker shade for hover effect */
+        }
+
+        .totals-table td {
+            padding: 8px;
+            background: #d7e6f3;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #2a5d94;
+        }
+
+        .totals-table .total-value {
             font-weight: bold;
         }
-        .td{
-            style="text-align: center;
+
+        /* Print and PDF buttons */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px auto;
+        }
+
+        .print-button,
+        .pdf-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2a5d94;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .print-button:hover,
+        .pdf-button:hover {
+            background-color: #1b3a57;
+        }
+
+        /* Print styles */
+        @media print {
+
+            .print-button,
+            .pdf-button {
+                display: none;
+            }
+
+            .invoice-box table td,
+            .totals-table td,
+            .bordered-table {
+                border: 1px solid #2a5d94;
+            }
+
+            .invoice-box table tr.heading td {
+                background: black;
+                color: white;
+                font-weight: bold;
+                text-align: center;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="button-container">
+        <button id="generate-pdf" class="pdf-button">Download PDF</button>
+        <button onclick="window.print()" class="print-button">Print Invoice</button>
+    </div>
     <div class="invoice-box">
-        <table cellpadding="0" cellspacing="0">
-            <tr class="information">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td>
-                                <div class="title">
-                                    <h1>Book Store</h1>
-                                </div>
-                            </td>
-                            <td class="right-align">
-                                <div>
-                                    Invoice #: <b>{{ $id }}</b><br>
-                                    Created: {{ $created }}<br>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+        <div class="title">নূরানী তা’লীমুল কুরআন বোর্ড বাংলাদেশ</div>
 
-        <table style="padding-bottom: 20px;">
+        <!-- Invoice Header Section with Flex Alignment -->
+        <div class="header-flex"
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="header">চালান #: <b>{{ convertEnglishToBangla($data['id']) }}</b></span>
+            <span class="header">তৈরি হয়েছে: {{ $data['created'] }}</span>
+        </div>
+        <div class="bordered-table">
+            <table>
+                <tr>
+                    <td>
+                        <span class="header">থেকে:</span><br>
+                        নূরানী তা’লীমুল কুরআন বোর্ড বাংলাদেশ<br>
+                        Tower, 24/B, Noorani, Block C Ring Rd,<br> Dhaka 1207
+                    </td>
+                    <td class="right-align">
+                        <span class="header">প্রতি:</span><br>
+                        {{ $data['seller_name'] }}<br>
+                        {{ $data['seller_address'] }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Invoice Details -->
+        <table cellpadding="0" cellspacing="0" style="margin-top: 20px;">
             <tr class="heading">
-                <td>From</td>
-                <td style="text-align: center">To</td>
+                <td>No.</td>
+                <td>ক্লাসের নাম</td>
+                <td>বিষয়ের নাম</td>
+                <td>ইউনিট মূল্য</td>
+                <td>মোট ইউনিট</td>
+                <td>মোট</td>
             </tr>
-            <tr class="item last">
-                <td>Book Store<br>
-                    1234 Elm Street, Suite 567<br>
-                    City, State, ZIP</td>
-                <td style="text-align: right">
-                    {{ $seller_name }}<br>
-                    {{ $seller_address }}
-                </td>
-            </tr>
-        </table>
 
-        <table cellpadding="0" cellspacing="0" style=" border: 1px solid rgb(212, 211, 211);">
-            <tr class="heading item">
-                <td style="text-align: center;">No.</td>
-                <td style="text-align: center;">Class Name</td>
-                <td style="text-align: center;">Subject Name</td>
-                <td style="text-align: center;">Unit Price</td>
-                <td style="text-align: center;">Total Unit</td>
-                <td style="text-align: center;">Total</td>
-            </tr>
-            @foreach ($classes as $index => $class_id)
-            <tr class="details" bordar>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $index + 1 }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $classNames[$class_id] }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $subjectNames[$subjects[$index]] }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $unit_price[$index] }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $total_unit[$index] }}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $unit_price[$index] * $total_unit[$index] }}</td>
-            </tr>
+            @foreach ($data['classes'] as $index => $class_id)
+                <tr class="item">
+                    <td>{{ convertEnglishToBangla($index + 1) }}</td>
+                    <td>{{ $data['classNames'][$class_id] ?? 'N/A' }}</td>
+                    <td>{{ $data['subjectNames'][$data['subjects'][$index]] ?? 'N/A' }}</td>
+                    <td>{{ convertEnglishToBangla($data['unit_price'][$index]) }}</td>
+                    <td>{{ convertEnglishToBangla($data['total_unit'][$index]) }}</td>
+                    <td>{{ convertEnglishToBangla($data['unit_price'][$index] * $data['total_unit'][$index]) }}</td>
+                </tr>
             @endforeach
         </table>
-        <br>
 
-        <table>
-            <tr class="heading">
-                <td style="text-align: center;">Description</td>
-                <td style="text-align: center">Price</td>
+        <!-- Totals Table -->
+        <table class="totals-table">
+            <tr>
+                <td>সাবটোটাল</td>
+                <td>{{ convertEnglishToBangla(array_sum(array_map(function ($u, $t) {return $u * $t;},$data['unit_price'],$data['total_unit']))) }}
+                    টাকা</td>
             </tr>
-            <tr class="item last">
-                <td style="text-align: center;">Subtotal</td>
-                <td style="text-align: center">
-                    {{ array_sum(array_map(function($u, $t) { return $u * $t; }, $unit_price, $total_unit)) }} Tk.
-                </td>
+            <tr>
+                <td>ট্যাক্স</td>
+                <td>{{ convertEnglishToBangla(17) }} টাকা</td>
             </tr>
-            <tr class="item last" style="text-align: center;">
-                <td>Tax</td>
-                <td style="text-align: center" style="text-align: center;">17 Tk.</td>
-            </tr>
-            <tr class="total">
-                <td></td>
-                <td >Total: <b style="text-align: center;">{{ array_sum(array_map(function($u, $t) { return $u * $t; }, $unit_price, $total_unit)) + 17 }} Tk</b></td>
+            <tr>
+                <td>মোট</td>
+                <td class="total-value">
+                    {{ convertEnglishToBangla(array_sum(array_map(function ($u, $t) {return $u * $t;},$data['unit_price'],$data['total_unit'])) + 17) }}
+                    টাকা</td>
             </tr>
         </table>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        document.getElementById('generate-pdf').addEventListener('click', function() {
+            // Get the element that you want to convert to PDF
+            var invoiceElement = document.querySelector('.invoice-box');
+
+            // Options for the PDF
+            var opt = {
+                margin: 1,
+                filename: 'invoice_' + {{ $data['id'] }} + '.pdf',
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
+                html2canvas: {
+                    scale: 2
+                },
+                jsPDF: {
+                    unit: 'in',
+                    format: 'letter',
+                    orientation: 'portrait'
+                }
+            };
+
+            // Generate the PDF
+            html2pdf()
+                .from(invoiceElement)
+                .set(opt)
+                .save();
+        });
+    </script>
+
 </body>
 
 </html>

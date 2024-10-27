@@ -7,70 +7,76 @@
                 <div class="col-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Store Book</h4>
+                            <h4>Store Book (দোকানের বই)</h4>
                         </div>
                         <form id="bookStoreForm"s>
-                        <div class="card-body">
-                            <div class="form-row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="validationDefault01"> Printing Press</label>
-                                    <select class="form-control" name="printingPressID">
-                                        <option value="" selected disabled>Select a printing press</option>
-                                        @foreach ($printingPress as $Press)
-                                            <option value="{{ $Press->id }}">{{ $Press->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Class</label>
-                                    <select class="form-control" id="classSelect" name="classID">
-                                        <option value="" selected disabled>Select a class</option>
-                                        @foreach ($classes as $class)
-                                            <option value="{{ $class->id }}">{{ $class->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-4 mb-3" id="subjectGroup" style="display: none;">
-                                    <label>Subject</label>
-                                    <div class="input-group">
-                                        <select class="form-control" id="subjectSelect" name="subjectID">
-                                            <option value="">Select a subject</option>
-                                            @foreach ($subjects as $subject)
-                                                <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="validationDefault01"> Printing Press (প্রিন্টিং প্রেস)</label>
+                                        <select class="form-control" name="printingPressID">
+                                            <option value="" selected disabled>Select a printing press (একটি প্রিন্টিং
+                                                প্রেস নির্বাচন করুন)</option>
+                                            @foreach ($printingPress as $Press)
+                                                <option value="{{ $Press->id }}">{{ $Press->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Unit Price</label>
-                                    <input type="text" class="form-control"  name="unit_price" id="unitPrice" onkeypress="totalUnitPrice()"
-                                        placeholder="Enter per unit price" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Total Unit</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control"  name="total_unit" id="totalAmount" onkeyup="totalUnitPrice()"  placeholder="Enter total unit"
-                                           required>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Class (ক্লাস)</label>
+                                        <select class="form-control" id="classSelect" name="classID">
+                                            <option value="" selected disabled>Select a class (একটি ক্লাস নির্বাচন
+                                                করুন)</option>
+                                            @foreach ($classes as $class)
+                                                <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3" id="subjectGroup" style="display: none;">
+                                        <label>Subject (বিষয়)</label>
+                                        <div class="input-group">
+                                            <select class="form-control" id="subjectSelect" name="subjectID">
+                                                <option value="">Select a subject (একটি বিষয় নির্বাচন করুন)</option>
+                                                @foreach ($subjects as $subject)
+                                                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Unit Price (ইউনিট মূল্য)</label>
+                                        <input type="text" class="form-control" name="unit_price" id="unitPrice"
+                                            onkeypress="totalUnitPrice()"
+                                            placeholder="Enter per unit price (প্রতি ইউনিট মূল্য লিখুন)" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Total Unit (মোট ইউনিট)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="total_unit" id="totalAmount"
+                                                onkeyup="totalUnitPrice()" placeholder="Enter total unit (মোট ইউনিট লিখুন)"
+                                                required>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Paid Amount (প্রদত্ত পরিমাণ)</label>
+                                        <input type="text" class="form-control" id="paid" name="paid_amount"
+                                            onkeyup="totalUnitPrice()" placeholder="Total paid amount (মোট প্রদত্ত পরিমাণ)"
+                                            required>
+                                        <span>Total ammount (মোট পরিমাণ): <b id="total"></b></span>
+
+                                        <input type="hidden" class="form-control" id="unpaid" name="unpaid_amount"
+                                            placeholder="Un-paid amount (অপরিশোধিত পরিমাণ)" required>
                                     </div>
 
+
                                 </div>
-                                <div class="col-md-4 mb-3">
-                                    <label>Paid Amount</label>
-                                    <input type="text" class="form-control" id="paid" name="paid_amount" onkeyup="totalUnitPrice()"
-                                        placeholder="Total paid amount" required>
-                                        <span>Total ammount: <b id="total"></b></span>
-
-                                    <input type="hidden"  class="form-control" id="unpaid" name="unpaid_amount"
-                                        placeholder="Un-paid amount" required>
-                                </div>
-
-
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <button type="button"  onclick="submitForm()" class="btn btn-primary" >Store Books</button>
-                        </div>
-                    </form>
+                            <div class="card-body">
+                                <button type="button" onclick="submitForm()" class="btn btn-primary">Store Books (বই স্টোর
+                                    করুন)</button>
+                            </div>
+                        </form>
 
                     </div>
 
@@ -88,10 +94,10 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Total Book Storage List</h4>
+                        <h4>Total Book Storage List (মোট বই স্টোরেজ তালিকা)</h4>
                         <div class="card-body" style="text-align: right;">
                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#exampleModal">Storage Book</button>
+                                data-target="#exampleModal">Storage Book (স্টোরেজ বই)</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -100,13 +106,13 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Press name</th>
-                                        <th>Class</th>
-                                        <th>Subject name</th>
-                                        <th>Total unit</th>
-                                        <th>Paid amount</th>
-                                        <th>Unpaid amount</th>
-                                        <th>Action</th>
+                                        <th>Press name (নাম প্রেস করুন)</th>
+                                        <th>Class (ক্লাস)</th>
+                                        <th>Subject name (বিষয়ের নাম)</th>
+                                        <th>Total unit (মোট ইউনিট)</th>
+                                        <th>Paid amount (প্রদত্ত পরিমাণ)</th>
+                                        <th>Unpaid amount (অপরিশোধিত পরিমাণ)</th>
+                                        <th>Action (অ্যাকশন)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="storeBookTableBody"></tbody>
@@ -124,7 +130,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Store Book</h5>
+                    <h5 class="modal-title" id="formModal">Store Book (দোকানের বই)</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -132,7 +138,7 @@
                 <div class="modal-body">
                     <form id="bookStoreForm">
                         <div class="form-group">
-                            <label>Printing Press</label>
+                            <label>Printing Press (প্রিন্টিং প্রেস)</label>
                             <div class="input-group">
                                 <select class="form-control" name="printingPressID">
                                     @foreach ($printingPress as $Press)
@@ -142,10 +148,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Class</label>
+                            <label>Class (ক্লাস)</label>
                             <div class="input-group">
                                 <select class="form-control" id="classSelect" name="classID">
-                                    <option value="" selected disabled>Select a class</option>
+                                    <option value="" selected disabled>Select a class (একটি ক্লাস নির্বাচন করুন)
+                                    </option>
                                     @foreach ($classes as $class)
                                         <option value="{{ $class->id }}">{{ $class->name }}</option>
                                     @endforeach
@@ -153,10 +160,10 @@
                             </div>
                         </div>
                         <div class="form-group" id="subjectGroup" style="display: none;">
-                            <label>Subject</label>
+                            <label>Subject (বিষয়)</label>
                             <div class="input-group">
                                 <select class="form-control" id="subjectSelect" name="subjectID">
-                                    <option value="">Select a subject</option>
+                                    <option value="">Select a subject (একটি বিষয় নির্বাচন করুন)</option>
                                     @foreach ($subjects as $subject)
                                         <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                                     @endforeach
@@ -164,9 +171,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Total Book</label>
+                            <label>Total Book (মোট বই)</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" placeholder="Enter total book"
+                                <input type="number" class="form-control" placeholder="Enter total book (মোট বই লিখুন)"
                                     name="total_book" required>
                             </div>
                         </div>
@@ -184,7 +191,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editFormModal">Edit Book Storage</h5>
+                    <h5 class="modal-title" id="editFormModal">Edit Book Storage (বই স্টোরেজ সম্পাদনা করুন)</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -194,7 +201,7 @@
                         <input type="hidden" name="id" id="editStorageId">
 
                         <div class="form-group">
-                            <label>Printing Press</label>
+                            <label>Printing Press (প্রিন্টিং প্রেস)</label>
                             <div class="input-group">
                                 <select class="form-control" id="printingPressSelect" name="printingPressID">
                                     @foreach ($printingPress as $Press)
@@ -205,7 +212,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Class</label>
+                            <label>Class (ক্লাস)</label>
                             <div class="input-group">
                                 <select class="form-control" id="editclassSelect" name="classID">
                                     @foreach ($classes as $class)
@@ -215,7 +222,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Subject</label>
+                            <label>Subject (বিষয়)</label>
                             <div class="input-group">
                                 <select class="form-control" id="editSubjectSelect" name="subjectID">
                                     <option value="" disabled>Select a subject</option>
@@ -227,7 +234,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Total Book</label>
+                            <label>Total Book (মোট বই)</label>
                             <div class="input-group">
                                 <input type="number" class="form-control" id="editTotalBook"
                                     placeholder="Enter total book" name="total_book" required>
@@ -264,7 +271,7 @@
             });
         });
 
-        function totalUnitPrice(){
+        function totalUnitPrice() {
             var totalAmount = $('#totalAmount').val();
             var unitPrice = $('#unitPrice').val();
 

@@ -76,7 +76,8 @@
             border-top: 2px solid #eee;
             font-weight: bold;
         }
-        .td{
+
+        .td {
             style="text-align: center;
         }
     </style>
@@ -84,87 +85,4 @@
 
 <body>
     <div class="invoice-box">
-        <table cellpadding="0" cellspacing="0">
-            <tr class="information">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td>
-                                <div class="title">
-                                    <h1>Book Store</h1>
-                                </div>
-                            </td>
-                            <td class="right-align">
-                                <div>
-                                    Invoice #: <b>{{ $id }}</b><br>
-                                    Created: {{ $created }}<br>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-
-        <table style="padding-bottom: 20px;">
-            <tr class="heading">
-                <td>From</td>
-                <td style="text-align: center">To</td>
-            </tr>
-            <tr class="item last">
-                <td>Book Store<br>
-                    1234 Elm Street, Suite 567<br>
-                    City, State, ZIP</td>
-                <td style="text-align: right">
-                    {{ $printing_press_name }}<br>
-                    {{ $address }}
-                </td>
-            </tr>
-        </table>
-
-        <table cellpadding="0" cellspacing="0" style=" border: 1px solid rgb(212, 211, 211);">
-            <tr class="heading item">
-                <td style="text-align: center;">No.</td>
-                <td style="text-align: center;">Press </td>
-                <td style="text-align: center;">Class </td>
-                <td style="text-align: center;">Subject</td>
-                <td style="text-align: center;">unit Price</td>
-                <td style="text-align: center;">Total unit</td>
-                <td style="text-align: center;">Total</td>
-            </tr>
-            <tr class="details" bordar>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">1</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$printing_press_name}}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$class_name}}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$subject_name}}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$unit_price}}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$total_unit}}</td>
-                <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{$unit_price * $total_unit}}</td>
-            </tr>
-        </table>
-        <br>
-
-        <table>
-            <tr class="heading">
-                <td style="text-align: center;">Description</td>
-                <td style="text-align: center">Price</td>
-            </tr>
-            <tr class="item last">
-                <td style="text-align: center;">Subtotal</td>
-                <td style="text-align: center">
-                    {{  $unit_price * $total_unit }} Tk.
-                </td>
-            </tr>
-            <tr class="item last" style="text-align: center;">
-                <td>Tax</td>
-                <td style="text-align: center" style="text-align: center;">17 Tk.</td>
-            </tr>
-            <tr class="total">
-                <td></td>
-                <td >Total: <b style="text-align: center;">{{  $unit_price * $total_unit + 17 }} Tk</b></td>
-            </tr>
-        </table>
-    </div>
-</body>
-
-</html>
+ <table cellpadding="0" cellspacing="0"><tr class="information"><td colspan="2"><table><tr><td><div class="title"><h1>Book Store</h1></div></td><td class="right-align"><div>Invoice #: <b>{{ $id }}</b><br> Created: {{ $created }}<br> </div> </td> </tr> </table> </td> </tr> </table> <table style="padding-bottom: 20px;"> <tr class="heading"> <td>From</td> <td style="text-align: center">To</td> </tr> <tr class="item last"> <td>Book Store<br> 1234 Elm Street, Suite 567<br> City, State, ZIP</td> <td style="text-align: right"> {{ $printing_press_name }}<br> {{ $address }} </td> </tr> </table> <table cellpadding="0" cellspacing="0" style=" border: 1px solid rgb(212, 211, 211);"> <tr class="heading item"> <td style="text-align: center;">No.</td> <td style="text-align: center;">Press </td> <td style="text-align: center;">Class </td> <td style="text-align: center;">Subject</td> <td style="text-align: center;">unit Price</td> <td style="text-align: center;">Total unit</td> <td style="text-align: center;">Total</td> </tr> <tr class="details" bordar> <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">1</td> <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $printing_press_name }}</td> <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $class_name }}</td> <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $subject_name }}</td> <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $unit_price }}</td> <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $total_unit }}</td> <td style="text-align: center; border: 1px solid rgb(212, 211, 211);">{{ $unit_price * $total_unit }}</td> </tr> </table> <br> <table> <tr class="heading"> <td style="text-align: center;">Description</td> <td style="text-align: center">Price</td> </tr> <tr class="item last"> <td style="text-align: center;">Subtotal</td> <td style="text-align: center"> {{ $unit_price * $total_unit }} Tk. </td> </tr> <tr class="item last" style="text-align: center;"> <td>Tax</td> <td style="text-align: center" style="text-align: center;">17 Tk.</td> </tr> <tr class="total"> <td></td> <td >Total: <b style="text-align: center;">{{ $unit_price * $total_unit + 17 }} Tk</b></td> </tr> </table> </div> </body> </html>

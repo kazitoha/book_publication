@@ -6,10 +6,10 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Total Seller List</h4>
+                        <h4>Total Seller List (মোট বিক্রেতার তালিকা)</h4>
                         <div class="card-body" style="text-align: right;">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add
-                                Seller</button>
+                                Seller (বিক্রেতা যোগ করুন)</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -18,10 +18,10 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>User Role</th>
-                                        <th>Action</th>
+                                        <th>Name (নাম)</th>
+                                        <th>Email (ইমেইল)</th>
+                                        <th>User Role (ব্যবহারকারীর ভূমিকা)</th>
+                                        <th>Action (অ্যাকশন)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="userTableBody"></tbody>
@@ -39,7 +39,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModal">Add Seller</h5>
+                    <h5 class="modal-title" id="formModal">Add Seller (বিক্রেতা যোগ করুন)</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -48,40 +48,40 @@
                     <form id="userForm" enctype="multipart/form-data">
 
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Name (নাম)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter name" name="name" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Phone</label>
+                            <label>Phone (ফোন)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter phone number" name="phone"
                                     required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Address</label>
+                            <label>Address (ঠিকানা)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter address" name="address"
                                     required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Image</label>
+                            <label>Image (ছবি)</label>
                             <div class="input-group">
                                 <input type="file" class="form-control" name="image">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Email</label>
+                            <label>Email (ইমেইল)</label>
                             <div class="input-group">
                                 <input type="email" class="form-control" placeholder="Enter email" name="email"
                                     required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Password</label>
+                            <label>Password (পাসওয়ার্ড)</label>
                             <div class="input-group">
                                 <input type="password" class="form-control" placeholder="Enter password" name="password"
                                     required>
@@ -101,7 +101,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editFormModal">Edit User</h5>
+                    <h5 class="modal-title" id="editFormModal">Edit User (ব্যবহারকারী সম্পাদনা করুন)</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -110,42 +110,42 @@
                     <form id="editUserForm" enctype="multipart/form-data">
                         <input type="hidden" name="id" id="editUserId">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Name (নাম)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter name" name="name"
                                     id="editUserName" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Phone</label>
+                            <label>Phone (ফোন)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter phone" name="phone"
                                     id="editUserPhone" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Address</label>
+                            <label>Address (ঠিকানা)</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter address" name="address"
                                     id="editUserAddress" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>image</label>
+                            <label>image (ইমেজ)</label>
                             <div class="input-group">
                                 <input type="file" class="form-control" placeholder="Enter name" name="image"
                                     required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Email</label>
+                            <label>Email (ইমেইল)</label>
                             <div class="input-group">
                                 <input type="email" class="form-control" placeholder="Enter email" name="email"
                                     id="editUserEmail" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Password</label>
+                            <label>Password (পাসওয়ার্ড)</label>
                             <div class="input-group">
                                 <input type="password" class="form-control" placeholder="Enter password" name="password"
                                     id="editUserPassword" required>

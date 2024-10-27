@@ -208,9 +208,8 @@ class adminController extends Controller
 
         $pdf_name = $book_storage->printingPress->name . '-' . $book_storage->created_at->format(' F j, Y') . ".pdf";
         return $pdf->download($pdf_name);
-
-
     }
+
 
 
 
@@ -655,10 +654,51 @@ class adminController extends Controller
     }
 
 
-
-
-
     public function sellInvoice($id)
+    {
+        $sell_info = Sell::with('seller')->find($id);
+
+        if (!$sell_info) {
+            return response()->json(['message' => 'Sell record not found'], 404);
+        }
+
+        $classIDs = json_decode($sell_info->class_id, true);
+        $subjectIDs = json_decode($sell_info->subject_id, true);
+        $unitPrices = json_decode($sell_info->unit_price, true);
+        $totalUnits = json_decode($sell_info->total_unit, true);
+
+        $classNames = Classes::whereIn('id', $classIDs)->pluck('name', 'id')->toArray();
+        $subjectNames = Subjects::whereIn('id', $subjectIDs)->pluck('name', 'id')->toArray();
+
+        $data = [
+            'id' => $sell_info->id,
+            'seller_name' => $sell_info->seller->name,
+            'seller_address' => $sell_info->seller->address,
+            'classes' => $classIDs,
+            'subjects' => $subjectIDs,
+            'classNames' => $classNames,
+            'subjectNames' => $subjectNames,
+            'unit_price' => $unitPrices,
+            'total_unit' => $totalUnits,
+            'paid_amount' => $sell_info->paid_amount,
+            'unpaid_amount' => $sell_info->unpaid_amount,
+            'created' => $sell_info->created_at->format('F j, Y'),
+        ];
+
+
+        return view('adminPanel.transfer_to_seller.sell_invoice', compact('data'));
+
+
+        // $pdf = PDF::setPaper('a4', 'portrait')->loadView('adminPanel.transfer_to_seller.sell_invoice', $data);
+
+        // $pdf_name = $sell_info->seller->name . ".pdf";
+        // return $pdf->download($pdf_name);
+    }
+
+
+
+
+    public function sellInvoicepdf($id)
     {
         $sell_info = Sell::with('seller')->find($id);
 
@@ -694,12 +734,4 @@ class adminController extends Controller
         $pdf_name = $sell_info->seller->name . ".pdf";
         return $pdf->download($pdf_name);
     }
-
-
-
-
-
-
-
-
 }

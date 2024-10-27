@@ -7,16 +7,17 @@
                 <div class="col-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Sell Book</h4>
+                            <h4>Sell Book (বই বিক্রি করুন)</h4>
                         </div>
                         <form id="sellForm">
                             <div class="card-body">
                                 <div class="form-row" id="inputRow_1">
                                     <div class="col-md-12 mb-3">
-                                        <label>Select a seller</label>
+                                        <label>Select a seller (একটি বিক্রেতা নির্বাচন করুন)</label>
                                         <select class="form-control" onchange="fetchSellerUnpaidAmount($(this).val())"
                                             name="sellerID">
-                                            <option value="" selected disabled>Select a seller</option>
+                                            <option value="" selected disabled>Select a seller (একটি বিক্রেতা নির্বাচন
+                                                করুন)</option>
                                             @foreach ($sellers as $seller)
                                                 <option value="{{ $seller->id }}">{{ $seller->name }}</option>
                                             @endforeach
@@ -25,10 +26,11 @@
                                     </div>
 
                                     <div class="col-md-2 mb-3">
-                                        <label>Class</label>
+                                        <label>Class (ক্লাস)</label>
                                         <select class="form-control" id="classSelect_1" name="classID[]"
                                             onchange="fetchSubjectsByClass(1)">
-                                            <option value="" selected disabled>Select a class</option>
+                                            <option value="" selected disabled>Select a class (একটি ক্লাস নির্বাচন
+                                                করুন)</option>
                                             @foreach ($classes as $class)
                                                 <option value="{{ $class->id }}">{{ $class->name }}</option>
                                             @endforeach
@@ -36,25 +38,25 @@
                                     </div>
 
                                     <div class="col-md-3 mb-3">
-                                        <label>Subject</label>
+                                        <label>Subject (বিষয়)</label>
                                         <div class="input-group">
                                             <select class="form-control" id="subjectSelect_1" name="subjectID[]"
                                                 onchange="fetchUnitPrice($(this).val(),1)">
-                                                <option value="">Select a subject</option>
+                                                <option value="">Select a subject (একটি বিষয় নির্বাচন করুন)</option>
                                             </select>
                                         </div>
-                                        <span>Per Unit Cost:<b id="perUnitCost_1"></b></span>
+                                        <span>Per Unit Cost (প্রতি ইউনিট খরচ):<b id="perUnitCost_1"></b></span>
                                         <input type="hidden" name="purchase_price" id="perUnitPrice_1">
                                     </div>
 
                                     <div class="col-md-3 mb-3">
-                                        <label>Unit Price</label>
+                                        <label>Unit Price (ইউনিট মূল্য)</label>
                                         <input type="text" class="form-control" name="unit_price[]" id="unitPrice_1"
                                             onkeyup="updateTotalAmount()" placeholder="Enter per unit price" required>
                                     </div>
 
                                     <div class="col-md-3 mb-3">
-                                        <label>Total Unit</label>
+                                        <label>Total Unit (মোট ইউনিট)</label>
                                         <div class="input-group">
                                             <input type="number" class="form-control" name="total_unit[]" id="totalUnit_1"
                                                 onkeyup="updateTotalAmount()" placeholder="Enter total unit" required>
@@ -77,17 +79,18 @@
 
                                 <div class="row">
                                     <div class="col-md-12 mb-3">
-                                        <label>Paid Amount</label>
+                                        <label>Paid Amount (প্রদত্ত পরিমাণ)</label>
                                         <input type="text" class="form-control" id="paid" name="paid_amount"
                                             onkeyup="updateTotalAmount()" placeholder="Total paid amount" required>
-                                        <span>Total amount: <b id="totalAmount">0.00</b></span>
+                                        <span>Total amount (মোট পরিমাণ): <b id="totalAmount">0.00</b></span>
                                         <input type="hidden" class="form-control" id="unpaid" name="unpaid_amount"
                                             placeholder="Un-paid amount" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <button type="button" onclick="submitForm()" class="btn btn-primary">Sell It</button>
+                                <button type="button" onclick="submitForm()" class="btn btn-primary">Sell It (এটা
+                                    বিক্রি)</button>
                             </div>
                         </form>
                     </div>
@@ -100,7 +103,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Total Book Storage List</h4>
+                        <h4>Total Book Storage List (মোট বই স্টোরেজ তালিকা)</h4>
                         <div class="card-body" style="text-align: right;">
                         </div>
                     </div>
@@ -133,7 +136,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-
         let inputFieldCounter = 2;
         $(document).ready(function() {
             $('#sellForm')[0].reset();
