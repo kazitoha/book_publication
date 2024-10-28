@@ -25,7 +25,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                 <a href="{{url('admin/printing/press')}}">
                                 <div class="banner-img">
-                                    <!--<img src="{{asset('admin_assets/img/banner/1.png')}}" alt="">-->
+                                   <img src="{{asset('admin_assets/img/banner/1.png')}}" alt="">
                                 </div>
                             </a>
                             </div>
@@ -50,7 +50,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                 <a href="{{url('admin/store/book')}}">
                                 <div class="banner-img">
-                                    <!--<img src="{{asset('admin_assets/img/banner/2.png')}}" alt="">-->
+                                    <img src="{{asset('admin_assets/img/banner/2.png')}}" alt="">
                                 </div>
                             </a>
                             </div>
@@ -77,7 +77,7 @@
                                 <a href="{{url('admin/create/class')}}">
                                 <div class="banner-img">
                                     
-                                    <!--<img src="{{asset('admin_assets/img/banner/3.png')}}" alt="">-->
+                                    <img src="{{asset('admin_assets/img/banner/3.png')}}" alt="">
                                 </div>
                             </a>
                             </div>
@@ -103,7 +103,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                                 <a href="{{url('admin/create/subject')}}">
                                 <div class="banner-img">
-                                    <!--<img src="{{asset('admin_assets/img/banner/4.png')}}" alt="">-->
+                                    <img src="{{asset('admin_assets/img/banner/4.png')}}" alt="">
                                 </div>
                             </a>
                             </div>

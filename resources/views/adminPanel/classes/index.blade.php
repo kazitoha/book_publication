@@ -15,8 +15,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="mainTable" class="table table-striped">
-                                <thead>
-                                    <tr>
+                                <thead><tr>
                                         <th>#</th>
                                         <th>name</th>
                                         <th>Action</th>
