@@ -120,23 +120,21 @@
 
                         <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
                             <a class="nav-link" href="{{ route('admin.sell.book') }}"><i
-                                    class="fas fa-shopping-basket"></i><span>বই বিক্রি</span> </a>
+                                    class="fas fa-shopping-basket"></i><span>বিক্রেতার কাছে স্থানান্তর</span> </a>
                         </li>
+                        
 
                         {{-- <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
                             <a class="nav-link" href="{{route('admin.sell.book')}}"><i
                                 class="fas fa-shopping-basket"></i><span>Sell List</span> </a>
                         </li> --}}
 
-                        <li class="dropdown @if ($url == 'admin/create/selller') active @endif ">
-                            <a href="{{ route('admin.create.seller') }}" class="nav-link"><i
-                                    class="fas fa-user-check"></i><span>বিক্রেতা যোগ করুন</span></a>
-                        </li>
+                       
 
 
-                        <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
-                            <a class="nav-link" href="{{ route('admin.sell.book') }}"><i
-                                    class="fas fa-dolly"></i><span>ফেরত অনুরোধ</span> </a>
+                        <li class="dropdown @if ($url == 'admin/seller/all/info') active @endif">
+                            <a class="nav-link" href="{{ route('admin.seller.all.info') }}"><i
+                                    class="fas fa-dolly"></i><span>বিক্রেতা সব তথ্য</span> </a>
                         </li>
 
                         <li class="menu-header">স্টোরেজ ম্যানেজমেন্ট</li>
@@ -164,25 +162,15 @@
 
 
 
-                        {{-- <li class="dropdown">
-                            <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                                class="far fa-money-bill-alt"></i><span>Account management</span></a>
-                            <ul class="dropdown-menu">
-                              <li><a class="nav-link" href="{{route('admin.account.create')}}">Account</a></li>
-                              <li><a class="nav-link" href="{{route('admin.account.deposit')}}">Deposit</a></li>
-                              <li><a class="nav-link" href="{{route('admin.account.expense')}}">Expense</a></li>
-                              <li><a class="nav-link" href="{{route('admin.account.expense.category')}}">Expense Category</a></li>
-                            </ul>
-                        </li> --}}
+                        <li class="dropdown @if ($url == 'admin/storage/alert') active @endif">
+                            <a class="nav-link" href="{{ route('admin.printing.press') }}"><i
+                                class="
+                            fas fa-print"></i></i><span>প্রিন্টিং
+                                        প্রেস যোগ করুন</span> </a>
+                        </li>
 
-
-
-
-
-                        <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
-                            <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                                    class="
-                                fas fa-print"></i><span>প্রিন্টিং
+                        {{-- <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
+                            <a href="#" class="menu-toggle nav-link has-dropdown"><span>প্রিন্টিং
                                     প্রেস</span></a>
                             <ul class="dropdown-menu">
                                 <li class="@if ($url == 'admin/printing/press') active @endif"><a class="nav-link"
@@ -190,7 +178,9 @@
                                 <li><a class="nav-link"
                                         href="{{ route('admin.printing.press.unpaid') }}">অপরিশোধিত</a></li>
                             </ul>
-                        </li>
+                        </li> --}}
+
+                        
 
                         <li class="dropdown @if ($url == 'admin/create/user') active @endif ">
                             <a href="{{ route('admin.create.user') }}" class="nav-link">
