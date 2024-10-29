@@ -3,10 +3,12 @@
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\AdminPanel\BookStorageController;
 use App\Http\Controllers\AdminPanel\ClassManagementController;
+use App\Http\Controllers\AdminPanel\CommonController;
 use App\Http\Controllers\AdminPanel\PrintingPressController;
 use App\Http\Controllers\AdminPanel\SellerAllInformationController;
 use App\Http\Controllers\AdminPanel\StorageAlertController;
 use App\Http\Controllers\AdminPanel\SubjectManagementController;
+use App\Http\Controllers\AdminPanel\TransferToSellerController;
 use App\Http\Controllers\AdminPanel\UserManagementController;
 use App\Http\Controllers\DistributorController;
 use Illuminate\Support\Facades\Route;
@@ -65,8 +67,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('account/deposit/create', 'transferTableData')->name('admin.account.deposit');
             Route::get('account/expense', 'transferTableData')->name('admin.account.expense');
             Route::get('account/expense/category', 'transferTableData')->name('admin.account.expense.category');
+        });
 
-            // Sell Management
+
+        // Sell Management
+        Route::controller(TransferToSellerController::class)->group(function () {
             Route::get('sell/book', 'createSell')->name('admin.sell.book');
             Route::any('sell/book/store', 'sellStore')->name('admin.sell.store');
             Route::get('get/sell/book/data/list', 'sellTableData')->name('admin.get.sell.data');
@@ -79,7 +84,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
 
         // Common Routes
-        Route::controller(ClassManagementController::class)->group(function () {
+        Route::controller(CommonController::class)->group(function () {
             Route::get('get/subjects/{classId}', 'getSubjectsByClass');
             Route::get('get/seller/{sellerId}', 'getSellerUnpaidAmount');
             Route::get('get/unit/price/{unitPrice}', 'bookUnitPrice');
@@ -127,7 +132,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         //book storage 
         Route::controller(BookStorageController::class)->group(function () {
             Route::get('store/book', 'Index')->name('admin.store.book');
-            Route::post('store/book/store', 'Store')->name('admin.store.book.store');
+            Route::post('store/book/store', 'Store')->name('admin.storage.book');
             Route::get('get/book/storage/data', 'Show')->name('admin.get.book.storage.data');
             Route::get('get/book/storage/edit/data/{id}', 'Edit')->name('admin.get.book.storage.edit');
             Route::put('store/book/update/data/{id}', 'Update')->name('admin.get.book.storage.update');
@@ -145,6 +150,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('get/printing/press/edit/data/{id}', 'Edit')->name('admin.get.printing.press.edit');
             Route::put('printing/press/update/data/{id}', 'Update')->name('admin.get.printing.press.update');
             Route::delete('printing/press/delete/{id}', 'Destroy')->name('admin.printing.press.delete');
+
+
+            Route::get('printing/press/all/information', 'PrintingPressAllInformation')->name('admin.printing.press.all.information');
         });
 
         // Seller All Information Routes

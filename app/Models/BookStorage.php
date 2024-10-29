@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StoreBook extends Model
+class BookStorage extends Model
 {
     use HasFactory;
-    protected $table='store_book';
+    protected $table = 'book_storage';
     protected $fillable = [
         'printing_press_id',
         'class_id',
@@ -26,7 +26,8 @@ class StoreBook extends Model
     {
         return $this->belongsTo(Subjects::class, 'subject_id');
     }
-    public function classes(){
+    public function classes()
+    {
         return $this->belongsTo(Classes::class, 'class_id');
     }
 }

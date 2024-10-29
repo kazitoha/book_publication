@@ -61,7 +61,8 @@ class PrintingPressController extends Controller
     }
 
 
-
-
-
+    public function PrintingPressAllInformation()
+    {
+        return view('adminPanel.printing_press_all_information.basic_data');
+    }
 }

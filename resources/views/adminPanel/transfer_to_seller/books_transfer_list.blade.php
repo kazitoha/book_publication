@@ -1,4 +1,4 @@
-{{-- resources/views/partials/book_storage_table.blade.php --}}
+createSell{{-- resources/views/partials/book_storage_table.blade.php --}}
 @foreach ($booksInSeller as $bookInSeller)
     <tr>
         <td>{{ $loop->iteration }}</td>

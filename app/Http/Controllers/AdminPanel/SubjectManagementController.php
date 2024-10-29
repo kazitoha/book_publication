@@ -21,7 +21,7 @@ class SubjectManagementController extends Controller
 {
     function Index()
     {
-        $classes = Classes::all();
+        $classes = Classes::orderBy('id', 'asc')->get();
         return view('adminPanel.subject.index', compact('classes'));
     }
 
@@ -43,7 +43,7 @@ class SubjectManagementController extends Controller
 
     function Show()
     {
-        $subjects = Subjects::orderBy('id', 'desc')->get();
+        $subjects = Subjects::orderBy('class_id', 'asc')->get();
         $html = view('adminPanel.subject.subject_table', compact('subjects'))->render();
         return response()->json(['html' => $html]);
     }

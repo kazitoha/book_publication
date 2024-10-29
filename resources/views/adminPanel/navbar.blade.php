@@ -20,6 +20,8 @@
         href="{{ asset('admin_assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
+
 </head>
 
 <body class="theme-white dark-sidebar sidebar-show">
@@ -122,14 +124,14 @@
                             <a class="nav-link" href="{{ route('admin.sell.book') }}"><i
                                     class="fas fa-shopping-basket"></i><span>বিক্রেতার কাছে স্থানান্তর</span> </a>
                         </li>
-                        
+
 
                         {{-- <li class="dropdown @if ($url == 'admin/sell/book') active @endif">
                             <a class="nav-link" href="{{route('admin.sell.book')}}"><i
                                 class="fas fa-shopping-basket"></i><span>Sell List</span> </a>
                         </li> --}}
 
-                       
+
 
 
                         <li class="dropdown @if ($url == 'admin/seller/all/info') active @endif">
@@ -160,13 +162,18 @@
 
                         <li class="menu-header">অন্যান্য মেনু</li>
 
-
+                        <li class="dropdown @if ($url == 'admin/printing/press/all/information') active @endif">
+                            <a class="nav-link" href="{{ route('admin.printing.press.all.information') }}"><i
+                                    class="
+                            fas fa-print"></i></i><span>প্রিন্টিং প্রেসের
+                                    সকল তথ্য</span> </a>
+                        </li>
 
                         <li class="dropdown @if ($url == 'admin/storage/alert') active @endif">
                             <a class="nav-link" href="{{ route('admin.printing.press') }}"><i
-                                class="
+                                    class="
                             fas fa-print"></i></i><span>প্রিন্টিং
-                                        প্রেস যোগ করুন</span> </a>
+                                    প্রেস যোগ করুন</span> </a>
                         </li>
 
                         {{-- <li class="dropdown @if ($url == 'admin/printing/press') active @endif ">
@@ -180,7 +187,7 @@
                             </ul>
                         </li> --}}
 
-                        
+
 
                         <li class="dropdown @if ($url == 'admin/create/user') active @endif ">
                             <a href="{{ route('admin.create.user') }}" class="nav-link">
