@@ -154,7 +154,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
             Route::get('printing/press/all/information', 'PrintingPressAllInformation')->name('admin.printing.press.all.information');
             Route::any('printing/press/filert/information', 'PrintingPressFilterInformation')->name('admin.printing.press.filter.information');
-            Route::any('printing/press/infomation/{bookData}/{start_date}/{end_date}', 'printPressInfomation')->name('admin.print.press.infomation');
+            Route::any('printing/press/infomation', 'getThisDetailsByMonth')->name('admin.get.print.press.infomation');
         });
 
         // Seller All Information Routes

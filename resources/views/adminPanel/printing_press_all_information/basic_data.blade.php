@@ -94,30 +94,83 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Press Name</th>
-                                        <th>Total Books</th>
+                                        <th>Class Name</th>
+                                        <th>Subject Name</th>
+                                        <th>Units</th>
+                                        <th>Total Book</th>
                                         <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (isset($bookStorages) && $bookStorages->isNotEmpty())
+
+                                    @if (isset($bookStorages))
                                         @foreach ($bookStorages as $bookStorage)
-                                            <tr>
-                                                <td>{{ optional($bookStorage->printingPress)->name ?? 'N/A' }}</td>
+                                            {{-- {{ dd($bookStorage) }} --}}
+                                            {{-- {{ dd(transformBookStorageData($bookStorage)) }} --}}
+                                            <tr class="{{ $loop->odd ? 'table-secondary' : 'table-light' }}">
                                                 <td>
-                                                    @if (!empty($bookStorage->totalUnits))
-                                                        {{ array_sum($bookStorage->totalUnits) }}
-                                                        <!-- Assuming totalUnits is an array -->
+                                                    {{ $bookStorage->printingPress->name }}
+                                                </td>
+                                                <td>
+                                                    @foreach (decodeJsonData($bookStorage->class_id) as $class)
+                                                        <span
+                                                            style="padding: 1px">{{ findClassInformartion($class)->name }}</span><br>
+                                                    @endforeach
+
+                                                </td>
+                                                <td>
+                                                    @foreach (decodeJsonData($bookStorage->subject_id) as $subject)
+                                                        <span
+                                                            style="padding: 1px">{{ findSubjectInformartion($subject)->name }}</span><br>
+                                                    @endforeach
+
+                                                </td>
+                                                <td>
+                                                    @if (!empty($bookStorage->total_unit))
+                                                        <div class="d-flex flex-column">
+                                                            @php
+                                                                $total_book = 0;
+                                                            @endphp
+                                                            @foreach (decodeJsonData($bookStorage->total_unit) as $unit)
+                                                                <span
+                                                                    class="{{ $loop->parent->odd ? 'badge badge-success' : 'badge badge-info' }} my-1"
+                                                                    style="padding: 1px">
+                                                                    @php
+                                                                        echo $unit;
+                                                                        $total_book += $unit;
+                                                                    @endphp
+                                                                </span>
+                                                            @endforeach
+                                                        </div>
                                                     @else
-                                                        0
+                                                        N/A
                                                     @endif
                                                 </td>
-                                                <td>{{ $bookStorage->created_at->format('Y-m-d') ?? 'N/A' }}</td>
                                                 <td>
-                                                    <a href="{{ url('admin/printing/press/infomation/' . $bookStorage->id . '/' . $start_date . '/' . $end_date) }}"
-                                                        class="btn btn-outline-primary btn-sm">Detail</a>
+                                                    {{ sumJsonData($bookStorage->total_unit) }}
                                                 </td>
+                                                <td>
+                                                    {{ $bookStorage->created_at->format('d-M-Y') }}
+                                                </td>
+                                                <td>
+                                                    <form action="{{ route('admin.get.print.press.infomation') }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="book_storage_id"
+                                                            value="{{ $bookStorage->id }}">
+                                                        <input type="hidden" name="printing_press_id"
+                                                            value="{{ $bookStorage->printing_press_id }}">
+                                                        <input type="hidden" name="start_date"
+                                                            value="{{ $start_date }}">
+                                                        <input type="hidden" name="end_date" value="{{ $end_date }}">
 
+                                                        <div class="card-footer pt-0">
+                                                            <button type="submit"
+                                                                class="btn btn-outline-{{ $loop->odd ? 'success ' : 'info' }}">Details</button>
+                                                        </div>
+                                                    </form>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     @else
@@ -128,6 +181,7 @@
                                     @endif
                                 </tbody>
                             </table>
+
 
                         </div>
                     </div>

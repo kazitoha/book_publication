@@ -141,24 +141,77 @@
         }
 
         /* Print styles */
+        /* Print styles */
+        /* Print styles */
         @media print {
 
+            /* Hide buttons during print */
             .print-button,
             .pdf-button {
                 display: none;
+                /* Hide the buttons when printing */
             }
 
+            /* Set overall margin for the invoice box to reduce space */
+            .invoice-box {
+                margin: 0;
+                /* No outer margin */
+                padding: 0;
+                /* No padding */
+                border: none;
+                /* No outer border */
+                box-shadow: none;
+                /* Remove shadow for clean output */
+            }
+
+            /* Adjust table styles for print */
+            .invoice-box table {
+                border-collapse: collapse;
+                /* Ensure borders are collapsed */
+                margin: 0;
+                /* Remove margin from the table */
+            }
+
+            /* Reduce padding and border for cells */
             .invoice-box table td,
-            .totals-table td,
-            .bordered-table {
+            .invoice-box table th {
+                /* Target both table data and headers */
                 border: 1px solid #2a5d94;
+                /* Keep a thin border */
+                padding: 2px;
+                /* Reduced padding */
+                margin: 0;
+                /* Remove margin for the cells */
             }
 
+            /* Header row styling */
             .invoice-box table tr.heading td {
                 background: black;
+                /* Header background */
                 color: white;
+                /* Header text color */
                 font-weight: bold;
+                /* Bold text for headers */
                 text-align: center;
+                /* Center align text */
+            }
+
+            /* Adjust font size for print */
+            .invoice-box {
+                font-size: 10px;
+                /* Smaller font size for compactness */
+            }
+
+            /* Control row height */
+            .invoice-box table tr {
+                height: auto;
+                /* Ensure no extra height is added */
+            }
+
+            /* Remove default page margin for print */
+            @page {
+                margin: 0;
+                /* Set the margin for printed pages to zero */
             }
         }
     </style>
@@ -172,99 +225,83 @@
     <div class="invoice-box">
         <div class="title">নূরানী তা’লীমুল কুরআন বোর্ড বাংলাদেশ</div>
 
-        <!-- Invoice Header Section with Flex Alignment -->
-        <div class="header-flex"
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <span class="header">চালান #: <b>{{ convertEnglishToBangla($bookStorage->id) }}</b></span>
-            <span class="header">তৈরি হয়েছে: {{ $bookStorage->created_at->format('d-M-Y') }}</span>
-        </div>
+        <span class="header">তৈরি হয়েছে: {{ now()->format('Y-m-d h:i A') }}</span>
 
-        <div class="bordered-table">
-            <h3>Details for {{ optional($bookStorage->printingPress)->name ?? 'N/A' }}</h3>
-            <p>Total Books: {{ $bookStorage->total_book ?? 0 }}</p>
-            <p>Created At: {{ $bookStorage->created_at->format('Y-m-d H:i:s') }}</p>
-            <p>Classes: {{ implode(', ', $bookStorage->classsNames) ?? 'N/A' }}</p>
-            <p>Subjects: {{ implode(', ', $bookStorage->subjectNames) ?? 'N/A' }}</p>
 
-            <h4>Books in the selected date range:</h4>
+
+
+
+
+        <table class="table table-bordered">
+
+            <tbody>
+                <tr>
+                    <td>Printing Press Name :<b> {{ $details_about_printing_press[0]->printingPress->name }}</b></td>
+                    <td>Address :<b> {{ $details_about_printing_press[0]->printingPress->address }} </b></td>
+                </tr>
+
+                <tr>
+                    <td>Filter Start Date : <b>{{ $start_date }}</b></td>
+                    <td>Filter End Date : <b>{{ $end_date }}</b></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div style="padding-top: 50px">
             <table>
                 <thead>
                     <tr>
                         <th>Press Name</th>
+                        <th>Class</th>
+                        <th>Subject</th>
                         <th>Total Books</th>
                         <th>Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($bookStoragesInRange as $book)
+                    {{-- "classNames" => array:1 [▶]
+                    "subjectNames" => array:5 [▶]
+                    "totalUnits" => array:5 [▶] --}}
+                    {{--             
+                    {{dd($details_about_printing_press)}} --}}
+                    @foreach ($details_about_printing_press as $storage_details)
                         <tr>
-                            <td>{{ optional($book->printingPress)->name ?? 'N/A' }}</td>
-                            <td>{{ $book->total_book ?? 0 }}</td>
-                            <td>{{ $book->created_at->format('Y-m-d') ?? 'N/A' }}</td>
+                            <td>{{ optional($storage_details->printingPress)->name ?? 'N/A' }}</td>
+                            <td>
+                                @foreach ($storage_details->classNames as $classNames)
+                                    {{ $classNames }}
+                                @endforeach
+                            </td>
+                            <td>
+                                @foreach ($storage_details->subjectNames as $index => $subjectNames)
+                                    {!! $subjectNames . ' : ' . $storage_details->totalUnits[$index] . ' ' . '<br>' !!}
+                                @endforeach
+                            </td>
+                            <td>{{ array_sum($storage_details->totalUnits) ?? 0 }}</td>
+                            <td>{{ $storage_details->created_at->format('d-M-Y h:i A') ?? 'N/A' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
 
-            {{ dd($bookStoragesInRange) }}
-            <table>
-                <tr>
-                    <td>
-                        <span class="header">থেকে:</span><br>
-                        নূরানী তা’লীমুল কুরআন বোর্ড বাংলাদেশ<br>
-                        Tower, 24/B, Noorani, Block C Ring Rd,<br> Dhaka 1207
-                    </td>
-                    <td class="right-align">
-                        <span class="header">প্রতি:</span><br>
-                        {{ $bookStorage->printingPress->name }}<br>
-                        {{ $bookStorage->printingPress->address }}
-                    </td>
-                </tr>
-            </table>
         </div>
 
-        {{ dd($bookStorage) }}
-        <!-- Invoice Details -->
-        <table cellpadding="0" cellspacing="0" style="margin-top: 20px;">
-            <tr class="heading">
-                <td>No.</td>
-                <td>ক্লাসের নাম</td>
-                <td>বিষয়ের নাম</td>
-                <td>ইউনিট মূল্য</td>
-                <td>মোট ইউনিট</td>
-                <td>মোট</td>
-            </tr>
 
-            @foreach ($data['classes'] as $index => $class_id)
-                <tr class="item">
-                    <td>{{ convertEnglishToBangla($index + 1) }}</td>
-                    <td>{{ $data['classNames'][$class_id] ?? 'N/A' }}</td>
-                    <td>{{ $data['subjectNames'][$data['subjects'][$index]] ?? 'N/A' }}</td>
-                    <td>{{ convertEnglishToBangla($data['unit_price'][$index]) }}</td>
-                    <td>{{ convertEnglishToBangla($data['total_unit'][$index]) }}</td>
-                    <td>{{ convertEnglishToBangla($data['unit_price'][$index] * $data['total_unit'][$index]) }}</td>
-                </tr>
-            @endforeach
-        </table>
 
-        <!-- Totals Table -->
-        <table class="totals-table">
-            <tr>
-                <td>সাবটোটাল</td>
-                <td>{{ convertEnglishToBangla(array_sum(array_map(function ($u, $t) {return $u * $t;},$data['unit_price'],$data['total_unit']))) }}
-                    টাকা</td>
-            </tr>
-            <tr>
-                <td>ট্যাক্স</td>
-                <td>{{ convertEnglishToBangla(17) }} টাকা</td>
-            </tr>
-            <tr>
-                <td>মোট</td>
-                <td class="total-value">
-                    {{ convertEnglishToBangla(array_sum(array_map(function ($u, $t) {return $u * $t;},$data['unit_price'],$data['total_unit'])) + 17) }}
-                    টাকা</td>
-            </tr>
-        </table>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -277,7 +314,7 @@
             // Options for the PDF
             var opt = {
                 margin: 1,
-                filename: 'invoice_' + {{ $bookStorage->id }} + '.pdf',
+                filename: 'invoice_' + {{ $details_about_printing_press[0]->id }} + '.pdf',
                 image: {
                     type: 'jpeg',
                     quality: 0.98

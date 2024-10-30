@@ -8,6 +8,7 @@ use App\Models\Classes;
 use Illuminate\Http\Request;
 use App\Models\PrintingPress;
 use App\Models\Subjects;
+use Svg\Tag\Rect;
 
 class PrintingPressController extends Controller
 {
@@ -79,90 +80,66 @@ class PrintingPressController extends Controller
 
         // Fetch all printing presses for the dropdown
         $all_printing_press = PrintingPress::all();
+
         $start_date = $request->start_date;
         $end_date = $request->end_date;
-        // Initialize the query
-        $query = BookStorage::with('printingPress', 'classes')
+
+        // Initialize the query with relationships and date filtering
+        $details_about_printing_press = BookStorage::with(['printingPress', 'subject', 'classes'])
             ->whereDate('created_at', '>=', $start_date)
             ->whereDate('created_at', '<=', $end_date)
             ->orderBy('id', 'desc');
 
-        // Add printing_press_id condition only if it is provided
+        // Add the printing_press_id condition only if it's provided in the request
         if ($request->printing_press_id) {
-            $query->where('printing_press_id', $request->printing_press_id);
+            $details_about_printing_press->where('printing_press_id', $request->printing_press_id);
         }
 
+        // Execute the query to get the filtered results
+        $bookStorages = $details_about_printing_press->get();
+
+
         // Execute the query and map the results
-        $bookStorages = $query->get()->map(function ($bookStorage) {
-            // Decode JSON fields
-            $classIds = json_decode($bookStorage->class_id, true);
-            $subjectIds = json_decode($bookStorage->subject_id, true);
-            $totalUnits = json_decode($bookStorage->total_unit, true);
 
-            // Retrieve subject names
-            $subjects = Subjects::whereIn('id', $subjectIds)->pluck('name')->toArray();
-            // Retrieve class names
-            $classes = Classes::whereIn('id', $classIds)->pluck('name')->toArray();
-
-            // Assign subject names and total units
-            $bookStorage->classsNames = $classes;
-            $bookStorage->subjectNames = $subjects;
-
-            // dd($bookStorage);
-
-            return $bookStorage;
-        });
 
         return view('adminPanel.printing_press_all_information.basic_data', compact('all_printing_press', 'bookStorages', 'start_date', 'end_date'));
     }
 
-    public function printPressInfomation($printingPressInfo, $start_date, $end_date)
+    public function getThisDetailsByMonth(Request $request)
     {
-        // Fetch the specific record or fail
-        $bookStorage = BookStorage::with('printingPress', 'classes')
-            ->findOrFail($printingPressInfo);
+        $request->validate([
+            'book_storage_id' => 'nullable|integer',
+            'printing_press_id' => 'required|integer',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
 
-        // Decode JSON fields for the selected bookStorage
-        $classIds = json_decode($bookStorage->class_id, true);
-        $subjectIds = json_decode($bookStorage->subject_id, true);
-        $totalUnits = json_decode($bookStorage->total_unit, true);
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
 
-        // Retrieve subject names
-        $subjects = Subjects::whereIn('id', $subjectIds)->pluck('name')->toArray();
-        // Retrieve class names
-        $classes = Classes::whereIn('id', $classIds)->pluck('name')->toArray();
 
-        // Assign subject names and total units to the bookStorage object
-        $bookStorage->classsNames = $classes;
-        $bookStorage->subjectNames = $subjects;
-        $bookStorage->totalUnits = $totalUnits;
+        // Initialize the query with relationships and date filtering
+        $details_about_printing_press = BookStorage::with(['printingPress', 'subject', 'classes'])
+            ->where('printing_press_id', $request->printing_press_id)
+            ->whereDate('created_at', '>=', $request->start_date)
+            ->whereDate('created_at', '<=', $request->end_date)
+            ->orderBy('id', 'desc');
 
-        // Query for book storages within the specified date range
-        $bookStoragesInRange = BookStorage::with('printingPress', 'classes')
-            ->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)
-            ->orderBy('id', 'desc')
-            ->get()
-            ->map(function ($book) {
-                // Decode JSON fields
-                $classIds = json_decode($book->class_id, true);
-                $subjectIds = json_decode($book->subject_id, true);
-                $totalUnits = json_decode($book->total_unit, true);
+        // Add the printing_press_id condition only if it's provided in the request
+        if ($request->book_storage_id) {
+            $details_about_printing_press->where('id', $request->book_storage_id);
+        }
 
-                // Retrieve subject names
-                $subjects = Subjects::whereIn('id', $subjectIds)->pluck('name')->toArray();
-                // Retrieve class names
-                $classes = Classes::whereIn('id', $classIds)->pluck('name')->toArray();
+        // Execute the query to get the filtered results
+        $details_about_printing_press = $details_about_printing_press->get();
 
-                // Assign subject names and total units
-                $book->classsNames = $classes;
-                $book->subjectNames = $subjects;
-                $book->totalUnits = $totalUnits;
+        $details_about_printing_press = transformBookStorageData($details_about_printing_press);
 
-                return $book;
-            });
 
-        // Return the view with both the specific book storage and the filtered list
-        return view('adminPanel.printing_press_all_information.details', compact('bookStorage', 'bookStoragesInRange', 'start_date', 'end_date'));
+        // dd($details_about_printing_press[0]->printingPress->name);
+
+
+        // // Return the view with both the specific book storage and the filtered list
+        return view('adminPanel.printing_press_all_information.details', compact('details_about_printing_press', 'start_date', 'end_date'));
     }
 }
