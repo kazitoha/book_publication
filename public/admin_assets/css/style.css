@@ -5572,10 +5572,11 @@ body.layout-3 .main-footer {
 }
 .main-sidebar .sidebar-brand {
     display: inline-block;
-    width: 100%;
+    width: 93%;
     text-align: center;
-    height: 70px;
-    line-height: 70px;
+    height: 20px;
+    line-height: 24px;
+    padding: 11px;
 }
 .main-sidebar .sidebar-brand.sidebar-brand-sm {
     display: none;

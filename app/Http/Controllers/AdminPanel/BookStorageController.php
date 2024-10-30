@@ -39,7 +39,6 @@ class BookStorageController extends Controller
                 // Retrieve subject names
                 $subjects = Subjects::whereIn('id', $subjectIds)->pluck('name')->toArray();
                 //class name also
-
                 $classes = Classes::whereIn('id', $classIds)->pluck('name')->toArray();
 
 

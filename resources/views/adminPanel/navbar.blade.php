@@ -104,9 +104,13 @@
             <div class="main-sidebar sidebar-style-2">
                 <aside id="sidebar-wrapper">
                     <div class="sidebar-brand">
-                        <a href="{{ url('admin/dashboard') }}"> <img alt="image"
+                        <a href="{{ url('admin/dashboard') }}">
+                            {{-- <img alt="image" src="{{ asset('admin_assets/img/logo.png') }}" class="header-logo" /> --}}
+                            <span class="logo-name">নূরানী তা’লীমুল কুরআন বোর্ড বাংলাদেশ</span>
+
+                            {{-- <a href="{{ url('admin/dashboard') }}"> <img alt="image"
                                 src="{{ asset('admin_assets/img/logo.png') }}" class="header-logo" />
-                        </a>
+                        </a> --}}
                     </div>
                     @php
                         $url = Route::current()->uri;
@@ -164,8 +168,7 @@
 
                         <li class="dropdown @if ($url == 'admin/printing/press/all/information') active @endif">
                             <a class="nav-link" href="{{ route('admin.printing.press.all.information') }}"><i
-                                    class="
-                            fas fa-print"></i></i><span>প্রিন্টিং প্রেসের
+                                    class="fa fa-podcast" aria-hidden="true"></i><span>প্রিন্টিং প্রেসের
                                     সকল তথ্য</span> </a>
                         </li>
 
