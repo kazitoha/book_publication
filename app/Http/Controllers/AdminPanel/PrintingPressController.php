@@ -73,6 +73,7 @@ class PrintingPressController extends Controller
     public function PrintingPressFilterInformation(Request $request)
     {
         $request->validate([
+            'print' => 'required|integer|min:1|max:2',
             'printing_press_id' => 'nullable|integer',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
@@ -80,6 +81,8 @@ class PrintingPressController extends Controller
 
         // Fetch all printing presses for the dropdown
         $all_printing_press = PrintingPress::all();
+
+        $printing_press_id = $request->printing_press_id;
 
         $start_date = $request->start_date;
         $end_date = $request->end_date;
@@ -98,25 +101,32 @@ class PrintingPressController extends Controller
         // Execute the query to get the filtered results
         $bookStorages = $details_about_printing_press->get();
 
-
         // Execute the query and map the results
-
-
-        return view('adminPanel.printing_press_all_information.basic_data', compact('all_printing_press', 'bookStorages', 'start_date', 'end_date'));
+        // dd($request->all());
+        if ($request->print == 1) {
+            return view('adminPanel.printing_press_all_information.basic_data', compact('all_printing_press', 'printing_press_id', 'bookStorages', 'start_date', 'end_date'));
+        } elseif ($request->print == 2) {
+            $bookStorages = transformBookStorageData($bookStorages);
+            return view('adminPanel.printing_press_all_information.multiple_printing_press_details', compact('all_printing_press', 'printing_press_id', 'bookStorages', 'start_date', 'end_date'));
+        } else {
+            return back();
+        }
     }
 
     public function getThisDetailsByMonth(Request $request)
     {
         $request->validate([
+            'print' => 'required|integer',
             'book_storage_id' => 'nullable|integer',
             'printing_press_id' => 'required|integer',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
+
+
         $start_date = $request->start_date;
         $end_date = $request->end_date;
-
 
         // Initialize the query with relationships and date filtering
         $details_about_printing_press = BookStorage::with(['printingPress', 'subject', 'classes'])
@@ -140,6 +150,6 @@ class PrintingPressController extends Controller
 
 
         // // Return the view with both the specific book storage and the filtered list
-        return view('adminPanel.printing_press_all_information.details', compact('details_about_printing_press', 'start_date', 'end_date'));
+        return view('adminPanel.printing_press_all_information.single_details', compact('details_about_printing_press', 'start_date', 'end_date'));
     }
 }

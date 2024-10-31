@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Classes extends Model
 {
-    protected $table='classes';
+    protected $table = 'classes';
     use HasFactory;
     protected $fillable = [
         'name',
     ];
+
+    public function bookStorages()
+    {
+        return $this->hasMany(BookStorage::class, 'class_id');
+    }
 }

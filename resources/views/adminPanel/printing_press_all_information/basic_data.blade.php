@@ -9,6 +9,9 @@
                     <h4>Search Info</h4>
                 </div>
 
+                <input type="hidden" name="print" value="1">
+
+
                 <div class="card-body pb-0">
                     <div class="form-row">
                         <!-- Email Input -->
@@ -75,16 +78,27 @@
                         <h4 class="mb-0">Filter Data</h4>
                         <div class="d-flex align-items-center">
                             <!-- Print and PDF buttons -->
-                            <div class="me-3">
-                                <button class="btn btn-success"><i class="fas fa-file-pdf"></i> PDF</button>
-                                <button class="btn btn-info me-2"><i class="fas fa-print"></i> Print</button>
-                            </div>
+                            @if (isset($bookStorages))
+                                <form action="{{ route('admin.printing.press.filter.information') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="print" value="2">
+                                    <input type="hidden" name="printing_press_id" value="{{ $printing_press_id }}">
+                                    <input type="hidden" name="start_date" value="{{ $start_date }}">
+                                    <input type="hidden" name="end_date" value="{{ $end_date }}">
+                                    <div class="me-3">
+                                        <button class="btn btn-primary me-2"><i class="fas fa-print"></i> Print</button>
+                                    </div>
 
-                            <!-- Search form -->
+                                </form>
+                            @endif
+
+
                             <form class="d-flex ms-3">
                                 <input type="text" class="form-control me-2" placeholder="Search...">
                                 <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                             </form>
+
+
                         </div>
                     </div>
 
@@ -157,13 +171,15 @@
                                                     <form action="{{ route('admin.get.print.press.infomation') }}"
                                                         method="POST">
                                                         @csrf
+                                                        <input type="hidden" name="print" value="2">
                                                         <input type="hidden" name="book_storage_id"
                                                             value="{{ $bookStorage->id }}">
                                                         <input type="hidden" name="printing_press_id"
                                                             value="{{ $bookStorage->printing_press_id }}">
                                                         <input type="hidden" name="start_date"
                                                             value="{{ $start_date }}">
-                                                        <input type="hidden" name="end_date" value="{{ $end_date }}">
+                                                        <input type="hidden" name="end_date"
+                                                            value="{{ $end_date }}">
 
                                                         <div class="card-footer pt-0">
                                                             <button type="submit"
@@ -175,7 +191,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center">No data available for the selected
+                                            <td colspan="7" class="text-center">No data available for the selected
                                                 filter.</td>
                                         </tr>
                                     @endif

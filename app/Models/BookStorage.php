@@ -10,6 +10,7 @@ class BookStorage extends Model
     use HasFactory;
     protected $table = 'book_storage';
     protected $fillable = [
+        'batch',
         'printing_press_id',
         'class_id',
         'subject_id',
