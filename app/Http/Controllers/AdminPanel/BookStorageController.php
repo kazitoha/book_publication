@@ -4,16 +4,19 @@ namespace App\Http\Controllers\AdminPanel;
 
 use App\Http\Controllers\Controller;
 use App\Models\BookStorage;
-use App\Models\PrintingPress;
-use App\Models\Classes;
-use App\Models\Subjects;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Sell;
+use App\Models\Classes;
+use App\Models\PrintingPress;
+use App\Models\Roles;
+use App\Models\Subjects;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class BookStorageController extends Controller
 {
-    public function Index()
+    function Index()
     {
         $printingPress = PrintingPress::all();
         $classes = Classes::all();
@@ -21,148 +24,126 @@ class BookStorageController extends Controller
         return view('adminPanel.store_book.index', compact('printingPress', 'classes', 'subjects'));
     }
 
-    public function show()
+
+    public function Show()
     {
 
-        $bookStorages = BookStorage::select(
-            'batch',
-            DB::raw('count(*) as total_records'),
-            DB::raw('sum(unit_price) as total_price'),
-            DB::raw('GROUP_CONCAT(DISTINCT class_id) as class_ids'),
-            DB::raw('GROUP_CONCAT(DISTINCT subject_id) as subject_ids')
-        )
-            ->groupBy('batch')
-            ->get();
+        // Fetch the paginated data first
+        $bookStorages = BookStorage::with('printingPress')->orderBy('batch', 'desc')->paginate(10);
 
+        // Group by batch after pagination
+        $bookStorages = $bookStorages->groupBy('batch');
         $html = view('adminPanel.store_book.book_storage_table', compact('bookStorages'))->render();
         return response()->json(['html' => $html]);
     }
 
 
 
-    public function Store(Request $request)
+    function Store(Request $request)
     {
+
         $request->validate([
-            'printingPressID' => 'required|integer',
-            'classID.*' => 'required|integer',
-            'subjectID.*' => 'required|integer',
-            'unit_price.*' => 'required|numeric',
-            'total_unit.*' => 'required|integer',
-            'paid_amount' => 'nullable|numeric',
-            'unpaid_amount' => 'required|numeric',
+            'printingPressID' => 'required',
+            'classID.*' => 'required|',
+            'subjectID.*' => 'required',
+            'unit_price.*' => 'required',
+            'total_unit.*' => 'required',
+            'paid_amount' => 'nullable',
+            'unpaid_amount' => 'required',
         ]);
 
+        // Retrieve subject details
+        $subject_details = Subjects::whereIn('id', $request->input('subjectID'))->get();
+
+        // Prepare arrays for calculations
         $classIDs = $request->input('classID');
         $subjectIDs = $request->input('subjectID');
         $unitPrices = $request->input('unit_price');
         $totalUnits = $request->input('total_unit');
 
-        $batch = BookStorage::latest('batch')->first();
 
-        $lastBookStorage = BookStorage::latest('batch')->first();
-        $batch = empty($lastBookStorage) ? 1 : $lastBookStorage->batch + 1;
+        // Save the sale
+        $bookStorage = new BookStorage();
+        $bookStorage->printing_press_id = $request->input('printingPressID');
+        $bookStorage->class_id = json_encode($classIDs);
+        $bookStorage->subject_id = json_encode($subjectIDs);
+        $bookStorage->unit_price = json_encode($unitPrices);
+        $bookStorage->total_unit = json_encode($totalUnits);
+        $bookStorage->paid_amount = $request->input('paid_amount');
+        $bookStorage->unpaid_amount = $request->input('unpaid_amount');
+        $bookStorage->save();
 
-        foreach ($subjectIDs as $index => $subjectID) {
 
-            // Validate that each index exists in all arrays to avoid undefined index errors
-            if (!isset($classIDs[$index], $unitPrices[$index], $totalUnits[$index])) {
-                return response()->json(['error' => 'Mismatched array lengths for subject and class data'], 400);
-            }
+        $subject_details = Subjects::whereIn('id', $request->input('subjectID'))->get();
 
-            // Save a new BookStorage record for each subject-class combination
-            $bookStorage = BookStorage::create([
-                'batch' => $batch,
-                'printing_press_id' => $request->input('printingPressID'),
-                'class_id' => $classIDs[$index],
-                'subject_id' => $subjectID,
-                'unit_price' => $unitPrices[$index],
-                'total_unit' => $totalUnits[$index],
-                'paid_amount' => $request->input('paid_amount'),
-                'unpaid_amount' => $request->input('unpaid_amount'),
-            ]);
-
-            // Update the total unit count for the subject
-            $subject = Subjects::find($subjectID);
-            if ($subject) {
-                $subject->increment('total_unit', $totalUnits[$index]);
-            } else {
-                return response()->json(['error' => 'Subject not found with ID ' . $subjectID], 404);
-            }
+        foreach ($subject_details as $subject_detail) {
+            $subjectIndex = array_search($subject_detail->id, $subjectIDs);
+            // Update the subject's total unit
+            $subject_detail->total_unit += $totalUnits[$subjectIndex];
+            $subject_detail->save();
         }
 
-        return response()->json(['message' => 'Book stored successfully']);
+
+
+
+
+
+        // if ($subject_detail->null) {
+        //     $subject_detail->update([
+        //         'total_unit' => $request->input('total_unit'),
+        //     ]);
+        // } else {
+        //     $total_books_in_this_subject = $subject_detail->total_unit + $request->input('total_unit');
+        //     $subject_detail->update([
+        //         'total_unit' => $total_books_in_this_subject,
+        //     ]);
+        // }
+
+        //  $printing_press_amount = ($request->unit_price * $request->total_unit) - $request->paid_amount;
+
+
+        return response()->json(['message' => 'Book Store successfully']);
     }
+
+
 
 
     public function Edit($id)
     {
-        $storeBook = BookStorage::with('details')->find($id);
+        $storeBook = BookStorage::find($id);
         return response()->json($storeBook);
     }
 
     public function Update(Request $request, $id)
     {
         $request->validate([
-            'printingPressID' => 'required',
-            'classID.*' => 'required',
-            'subjectID.*' => 'required',
-            'unit_price.*' => 'required|numeric',
-            'total_unit.*' => 'required|integer',
-            'paid_amount' => 'nullable|numeric',
-            'unpaid_amount' => 'required|numeric',
+            'printingPressID' => 'required|string|max:255',
+            'classID' => 'required|',
+            'subjectID' => 'required|string',
+            'total_book' => 'required|numeric',
         ]);
 
-        $bookStorage = BookStorage::findOrFail($id);
-        $bookStorage->update([
-            'printing_press_id' => $request->input('printingPressID'),
-            'paid_amount' => $request->input('paid_amount'),
-            'unpaid_amount' => $request->input('unpaid_amount')
-        ]);
+        $storeBook = BookStorage::find($id);
+        $storeBook->printing_press_id = $request->input('printingPressID');
+        $storeBook->class_id = $request->input('classID');
+        $storeBook->subject_id = $request->input('subjectID');
+        $storeBook->total_book = $request->input('total_book');
+        $storeBook->save();
 
-        BookStorageDetail::where('book_storage_id', $id)->delete();
-
-        $classIDs = $request->input('classID');
-        $subjectIDs = $request->input('subjectID');
-        $unitPrices = $request->input('unit_price');
-        $totalUnits = $request->input('total_unit');
-
-        foreach ($subjectIDs as $index => $subjectID) {
-            BookStorageDetail::create([
-                'book_storage_id' => $bookStorage->id,
-                'class_id' => $classIDs[$index],
-                'subject_id' => $subjectID,
-                'unit_price' => $unitPrices[$index],
-                'total_unit' => $totalUnits[$index],
-            ]);
-        }
-
-        return response()->json(['message' => 'Book updated successfully']);
+        return response()->json(['message' => 'Book Update successfully']);
     }
+
 
     public function Destroy($id)
     {
         BookStorage::destroy($id);
-        return response()->json(['message' => 'Book deleted successfully']);
+        return response()->json(['message' => 'Book Deleted successfully']);
     }
 
-    public function Invoice($id)
+    public function Invoice($batch)
     {
-        $bookStorage = BookStorage::with(['printingPress', 'details.class', 'details.subject'])->find($id);
 
-        if (!$bookStorage) {
-            return back()->with('error', 'Something went wrong');
-        }
-
-        $data = [
-            'id' => $bookStorage->id,
-            'printing_press_name' => $bookStorage->printingPress->name,
-            'address' => $bookStorage->printingPress->address,
-            'details' => $bookStorage->details,
-            'created' => $bookStorage->created_at->format('F j, Y'),
-        ];
-
-        $pdf = PDF::setPaper('a4', 'portrait')->loadView('adminPanel.store_book.invoice', $data);
-        $pdf_name = $bookStorage->printingPress->name . '-' . $bookStorage->created_at->format('F j, Y') . ".pdf";
-        return $pdf->download($pdf_name);
+        $batch_infos = BookStorage::where('batch', $batch)->orderBy('batch', 'desc')->get()->groupBy('batch');
+        return view('adminPanel.store_book.invoice', compact('batch_infos'));
     }
 }

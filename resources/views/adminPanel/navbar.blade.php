@@ -164,9 +164,17 @@
                         </li>
 
 
+                        <li class="dropdown ">
+                            <a class="nav-link" href="{{ url('admin/try/to/show/data/new/way') }}"><i
+                                    class="fas fa-info"></i><span>New</span> </a>
+                        </li>
+
+
+
+
                         <li class="menu-header">অন্যান্য মেনু</li>
 
-                        <li class="dropdown @if ($url == 'admin/printing/press/all/information') active @endif">
+                        <li class="dropdown @if ($url == 'admin/printing/press/all/information' || $url == 'admin/printing/press/filert/information') active @endif">
                             <a class="nav-link" href="{{ route('admin.printing.press.all.information') }}"><i
                                     class="fa fa-podcast" aria-hidden="true"></i><span>প্রিন্টিং প্রেসের
                                     সকল তথ্য</span> </a>

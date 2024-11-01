@@ -7,7 +7,7 @@
                 <div class="col-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Sell Book (বই বিক্রি করুন)</h4>
+                            <h4>Book Storage (বুক স্টোরেজ)</h4>
                         </div>
                         <form id="sellForm">
                             <div class="card-body">
@@ -109,7 +109,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="mainTable" class="table table-striped">
+                            <table id="mainTable" class="table table-striped  text-center">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -274,7 +274,7 @@
         function submitForm() {
             const form = $('#sellForm');
             $.ajax({
-                url: '{{ route('admin.storage.book') }}',
+                url: '{{ route('admin.try.to.store.data.new.way') }}',
                 method: 'POST',
                 data: form.serialize(),
                 headers: {

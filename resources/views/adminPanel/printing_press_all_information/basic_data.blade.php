@@ -79,25 +79,27 @@
                         <div class="d-flex align-items-center">
                             <!-- Print and PDF buttons -->
                             @if (isset($bookStorages))
-                                <form action="{{ route('admin.printing.press.filter.information') }}" method="POST">
+                                <form action="{{ route('admin.get.print.press.infomation') }}" method="post">
                                     @csrf
-                                    <input type="hidden" name="print" value="2">
-                                    <input type="hidden" name="printing_press_id" value="{{ $printing_press_id }}">
+                                    <input type="hidden" name="print_type" value="multiple">
                                     <input type="hidden" name="start_date" value="{{ $start_date }}">
                                     <input type="hidden" name="end_date" value="{{ $end_date }}">
+
                                     <div class="me-3">
                                         <button class="btn btn-primary me-2"><i class="fas fa-print"></i> Print</button>
                                     </div>
-
                                 </form>
                             @endif
-
-
-                            <form class="d-flex ms-3">
-                                <input type="text" class="form-control me-2" placeholder="Search...">
-                                <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
-                            </form>
-
+                            @if (isset($bookStorages))
+                                <form class="d-flex ms-3" action="{{ route('admin.search.from.filtered.data') }}"
+                                    method="post">
+                                    @csrf
+                                    <input type="hidden" name="start_date" value="{{ $start_date }}">
+                                    <input type="hidden" name="end_date" value="{{ $end_date }}">
+                                    <input type="text" class="form-control me-2" name="search" placeholder="Search...">
+                                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                                </form>
+                            @endif
 
                         </div>
                     </div>
@@ -117,35 +119,39 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     @if (isset($bookStorages))
+                                        @php
+                                            $currentPrintingPressId = null;
+                                        @endphp
                                         @foreach ($bookStorages as $bookStorage)
-                                            {{-- {{ dd($bookStorage) }} --}}
-                                            {{-- {{ dd(transformBookStorageData($bookStorage)) }} --}}
+                                            @if ($currentPrintingPressId !== $bookStorage->printing_press_id)
+                                                @php
+                                                    $currentPrintingPressId = $bookStorage->printing_press_id;
+                                                @endphp
+                                                <tr class="table-light">
+                                                    <td colspan="7">
+                                                        <strong>{{ $bookStorage->printingPress->name }}</strong>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                             <tr class="{{ $loop->odd ? 'table-secondary' : 'table-light' }}">
-                                                <td>
-                                                    {{ $bookStorage->printingPress->name }}
-                                                </td>
+                                                <td></td> <!-- Empty cell for Press Name -->
                                                 <td>
                                                     @foreach (decodeJsonData($bookStorage->class_id) as $class)
                                                         <span
                                                             style="padding: 1px">{{ findClassInformartion($class)->name }}</span><br>
                                                     @endforeach
-
                                                 </td>
                                                 <td>
                                                     @foreach (decodeJsonData($bookStorage->subject_id) as $subject)
                                                         <span
                                                             style="padding: 1px">{{ findSubjectInformartion($subject)->name }}</span><br>
                                                     @endforeach
-
                                                 </td>
                                                 <td>
                                                     @if (!empty($bookStorage->total_unit))
                                                         <div class="d-flex flex-column">
-                                                            @php
-                                                                $total_book = 0;
-                                                            @endphp
+                                                            @php $total_book = 0; @endphp
                                                             @foreach (decodeJsonData($bookStorage->total_unit) as $unit)
                                                                 <span
                                                                     class="{{ $loop->parent->odd ? 'badge badge-success' : 'badge badge-info' }} my-1"
@@ -171,7 +177,7 @@
                                                     <form action="{{ route('admin.get.print.press.infomation') }}"
                                                         method="POST">
                                                         @csrf
-                                                        <input type="hidden" name="print" value="2">
+                                                        <input type="hidden" name="print_type" value="single">
                                                         <input type="hidden" name="book_storage_id"
                                                             value="{{ $bookStorage->id }}">
                                                         <input type="hidden" name="printing_press_id"
@@ -183,7 +189,7 @@
 
                                                         <div class="card-footer pt-0">
                                                             <button type="submit"
-                                                                class="btn btn-outline-{{ $loop->odd ? 'success ' : 'info' }}">Details</button>
+                                                                class="btn btn-outline-{{ $loop->odd ? 'success' : 'info' }}">Details</button>
                                                         </div>
                                                     </form>
                                                 </td>
@@ -197,10 +203,9 @@
                                     @endif
                                 </tbody>
                             </table>
-
-
                         </div>
                     </div>
+
 
                 </div>
             </div>

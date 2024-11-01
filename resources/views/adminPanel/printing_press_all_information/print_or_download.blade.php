@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-
+        @if ($print_type == 'single')
+            Single
+        @elseif($print_type == 'multiple')
+            Multiple
+        @endif
         | Invoice
     </title>
     <style>
@@ -114,55 +118,60 @@
     </div>
     <div class="invoice-box">
         <div class="title">নূরানী তা’লীমুল কুরআন বোর্ড বাংলাদেশ</div>
+        <div class="header">তৈরি হয়েছে: {{ now()->format('Y-m-d h:i A') }}</div>
 
-        <div class="header " style="text-align: right">তৈরি হয়েছে: {{ now()->format('Y-m-d h:i A') }}</div>
+        <table>
+            <tbody>
+                @if ($print_type == 'single')
+                    <tr>
+                        <td>Printing Press Name:
+                            <strong>{{ $details_about_printing_press[0]->printingPress->name ?? 'N/A' }}</strong>
+                        </td>
+                        <td>Address:
+                            <strong>{{ $details_about_printing_press[0]->printingPress->address ?? 'N/A' }}</strong>
+                        </td>
+                    </tr>
+                @endif
+                <tr>
+                    <td>Filter Start Date: <strong>{{ $start_date }}</strong></td>
+                    <td>Filter End Date: <strong>{{ $end_date }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
         <div style="margin-top: 30px;">
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <table>
                 <thead>
-                    <tr class="heading" style="background-color: #f2f2f2;">
-                        <th style="padding: 10px; border: 1px solid #dddddd;">Class</th>
-                        <th style="padding: 10px; border: 1px solid #dddddd;">Subject</th>
-                        <th style="padding: 10px; border: 1px solid #dddddd;">Units</th>
+                    <tr class="heading">
+                        <th>Press Name</th>
+                        <th>Class</th>
+                        <th>Subject</th>
+                        <th>Total Books</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                        $printing_press_id = null;
-                        $batch_id = null;
-                    @endphp
-                    @foreach ($batch_infos as $batch => $batchGroup)
+                    @foreach ($details_about_printing_press as $storage_details)
                         <tr>
-                            <td colspan="2" style="background-color: #e0e0e0; font-weight: bold; padding: 10px;">
-                                {{ findPrintingPressInfo($batchGroup[0]->printing_press_id)->name }}
+                            <td>{{ optional($storage_details->printingPress)->name ?? 'N/A' }}</td>
+                            <td>
+                                @foreach (decodeJsonData($storage_details->class_id) as $classId)
+                                    {{ findClassInformartion($classId)->name }} <br>
+                                @endforeach
                             </td>
-                            <td colspan="2" style="background-color: #e0e0e0; font-weight: bold; padding: 10px;">
-                                {{ $batchGroup[0]->created_at->format('Y-m-d h:i A') }}
+                            <td>
+                                @foreach (decodeJsonData($storage_details->subject_id) as $index => $subjectId)
+                                    {{ findSubjectInformartion($subjectId)->name }} :
+                                    {{ $storage_details->totalUnits[$index] ?? 0 }} <br>
+                                @endforeach
                             </td>
-                        </tr>
-                        @foreach ($batchGroup as $batchInfo)
-                            <tr>
-                                <td style="padding: 10px; border: 1px solid #dddddd;">
-                                    {{ findClassInformartion($batchInfo->class_id)->name }}</td>
-                                <td style="padding: 10px; border: 1px solid #dddddd;">
-                                    {{ findSubjectInformartion($batchInfo->subject_id)->name }}</td>
-                                <td style="padding: 10px; border: 1px solid #dddddd;">{{ $batchInfo->total_unit }}</td>
-                                <!-- Show individual total unit -->
-                            </tr>
-                        @endforeach
-                        <tr>
-                            <td colspan="2" style="font-weight: bold; padding: 10px; border-top: 2px solid #dddddd;">
-                                Total Unit :</td>
-                            <td colspan="2" style="font-weight: bold; padding: 10px; border-top: 2px solid #dddddd;">
-                                {{ sumTotalUnitByBatchId($batch) }}</td>
-                            <!-- Empty cell for alignment -->
+                            <td>{{ array_sum($storage_details->totalUnits) ?? 0 }}</td>
+                            <td>{{ $storage_details->created_at->format('d-M-Y h:i A') ?? 'N/A' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-
-
-
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -170,7 +179,7 @@
         document.getElementById('generate-pdf').addEventListener('click', function() {
             var invoiceElement = document.querySelector('.invoice-box');
             var opt = {
-                margin: .2,
+                margin: 1,
                 filename: 'invoice_' + {{ $details_about_printing_press[0]->id ?? 0 }} + '.pdf',
                 image: {
                     type: 'jpeg',

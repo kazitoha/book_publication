@@ -12,9 +12,4 @@ class Classes extends Model
     protected $fillable = [
         'name',
     ];
-
-    public function bookStorages()
-    {
-        return $this->hasMany(BookStorage::class, 'class_id');
-    }
 }

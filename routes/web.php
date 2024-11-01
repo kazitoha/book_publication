@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminPanel\SellerAllInformationController;
 use App\Http\Controllers\AdminPanel\StorageAlertController;
 use App\Http\Controllers\AdminPanel\SubjectManagementController;
 use App\Http\Controllers\AdminPanel\TransferToSellerController;
+use App\Http\Controllers\AdminPanel\TryNewThinksController;
 use App\Http\Controllers\AdminPanel\UserManagementController;
 use App\Http\Controllers\DistributorController;
 use Illuminate\Support\Facades\Route;
@@ -50,9 +51,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         })->name('admin.dashboard');
 
         Route::controller(AdminController::class)->group(function () {
-
-
-
 
             // Seller Management
             Route::get('create/seller', 'createSeller')->name('admin.create.seller');
@@ -155,7 +153,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('printing/press/all/information', 'PrintingPressAllInformation')->name('admin.printing.press.all.information');
             Route::any('printing/press/filert/information', 'PrintingPressFilterInformation')->name('admin.printing.press.filter.information');
             Route::any('printing/press/infomation', 'getThisDetailsByMonth')->name('admin.get.print.press.infomation');
+            Route::post('search/from/filtered/data', 'searchFromFilteredData')->name('admin.search.from.filtered.data');
         });
+
+
+
+        //try new thinks
+        Route::controller(TryNewThinksController::class)->group(function () {
+            Route::post('try/to/store/data/new/way', 'store')->name('admin.try.to.store.data.new.way');
+            Route::get('try/to/show/data/new/way', 'show');
+        });
+
 
         // Seller All Information Routes
         Route::controller(SellerAllInformationController::class)->group(function () {

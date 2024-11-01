@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\BookStorage;
 use App\Models\Classes;
+use App\Models\PrintingPress;
 use App\Models\Subjects;
 
 if (!function_exists('format_date')) {
@@ -30,6 +32,12 @@ if (!function_exists('convertEnglishToBangla')) {
 
         // Replace each English digit with the corresponding Bangla numeral
         return str_replace(range(0, 9), $banglaDigits, (string) $number);
+    }
+}
+if (!function_exists('findPrintingPressInfo')) {
+    function findPrintingPressInfo($id)
+    {
+        return PrintingPress::find($id); // true returns an associative array
     }
 }
 if (!function_exists('decodeJsonData')) {
@@ -65,17 +73,25 @@ if (!function_exists('sumJsonData')) {
     }
 }
 if (!function_exists('transformBookStorageData')) {
-    // In your helpers.php or a dedicated helper file
     function transformBookStorageData($bookStorages)
     {
         return $bookStorages->map(function ($bookStorage) {
             $bookStorage->classNames = Classes::whereIn('id', json_decode($bookStorage->class_id, true))
-                ->pluck('name')->toArray();
+                ->pluck('name')
+                ->toArray();
+
             $bookStorage->subjectNames = Subjects::whereIn('id', json_decode($bookStorage->subject_id, true))
-                ->pluck('name')->toArray();
+                ->pluck('name')
+                ->toArray();
+
             $bookStorage->totalUnits = json_decode($bookStorage->total_unit, true);
 
             return $bookStorage;
         });
     }
+}
+
+function sumTotalUnitByBatchId($batchId)
+{
+    return BookStorage::where('batch', $batchId)->sum('total_unit');
 }

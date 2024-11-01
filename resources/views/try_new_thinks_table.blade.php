@@ -114,7 +114,6 @@
     </div>
     <div class="invoice-box">
         <div class="title">নূরানী তা’লীমুল কুরআন বোর্ড বাংলাদেশ</div>
-
         <div class="header " style="text-align: right">তৈরি হয়েছে: {{ now()->format('Y-m-d h:i A') }}</div>
         <div style="margin-top: 30px;">
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
@@ -130,7 +129,7 @@
                         $printing_press_id = null;
                         $batch_id = null;
                     @endphp
-                    @foreach ($batch_infos as $batch => $batchGroup)
+                    @foreach ($batchs as $batch => $batchGroup)
                         <tr>
                             <td colspan="2" style="background-color: #e0e0e0; font-weight: bold; padding: 10px;">
                                 {{ findPrintingPressInfo($batchGroup[0]->printing_press_id)->name }}
@@ -170,7 +169,7 @@
         document.getElementById('generate-pdf').addEventListener('click', function() {
             var invoiceElement = document.querySelector('.invoice-box');
             var opt = {
-                margin: .2,
+                margin: 1,
                 filename: 'invoice_' + {{ $details_about_printing_press[0]->id ?? 0 }} + '.pdf',
                 image: {
                     type: 'jpeg',
